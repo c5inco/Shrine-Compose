@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -191,7 +192,7 @@ fun NavigationSurface(
         Column(
             Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Spacer(Modifier.height(20.dp))
             NavItem(Screens.All, Screens.All == activeScreen) {
@@ -222,9 +223,11 @@ fun NavItem(
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.clickable {
-            onClick(screen)
-        }
+        modifier = Modifier
+            .clip(MaterialTheme.shapes.medium)
+            .clickable { onClick(screen) }
+            .fillMaxWidth(0.5f)
+            .height(44.dp)
     ) {
         if (active) {
             Image(
@@ -236,7 +239,6 @@ fun NavItem(
             "$screen".toUpperCase(),
             style = MaterialTheme.typography.subtitle1,
             color = LocalContentColor.current.copy(alpha = if (active) ContentAlpha.high else ContentAlpha.medium),
-            modifier = Modifier.padding(vertical = 8.dp)
         )
     }
 }
