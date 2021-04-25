@@ -14,28 +14,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            EmptyComposeTheme {
-                HomeScreen()
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    EmptyComposeTheme {
-        Button(enabled = false, onClick = { /*TODO*/ }) {
-            Text("hello", color = MaterialTheme.colors.primary)
-            Icon(
-                imageVector = Icons.Default.Face,
-                contentDescription = "face",
-                tint = MaterialTheme.colors.primary
-            )
-            Icon(
-                imageVector = Icons.Default.Face,
-                contentDescription = "face",
-            )
+            ShrineApp()
         }
     }
 }

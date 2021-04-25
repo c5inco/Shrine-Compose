@@ -20,126 +20,101 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.emptycompose.ui.theme.EmptyComposeTheme
 
-@Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
-fun HomeScreen() {
-    EmptyComposeTheme {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background)
-        ) {
-            TopAppBar(
-                title = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.logo_shrine),
-                        contentDescription = "Shrine logo",
-                        tint = MaterialTheme.colors.onBackground
-                    )
-                },
-                backgroundColor = MaterialTheme.colors.background,
-                actions = {
-                    Icon(
-                        imageVector = Icons.Outlined.Search,
-                        contentDescription = "Search icon"
-                    )
-                    Spacer(Modifier.width(12.dp))
-                },
-                elevation = 0.dp
-            )
-            Surface(
-                Modifier.fillMaxSize(),
-                shape = MaterialTheme.shapes.large,
-                elevation = 16.dp
+fun HomeScreen(
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier.fillMaxSize(),
+        shape = MaterialTheme.shapes.large,
+        elevation = 16.dp
+    ) {
+        Column {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.End
             ) {
-                Column {
-                    Row(
+                Icon(
+                    imageVector = Icons.Outlined.Tune,
+                    contentDescription = "Filter icon"
+                )
+            }
+            BoxWithConstraints(
+                Modifier
+                    .fillMaxSize()
+                    .padding(start = 16.dp)
+                    .horizontalScroll(rememberScrollState())
+            ) {
+                val gridGutter = 16.dp
+                Row(
+                    Modifier
+                        .fillMaxSize(),
+                    horizontalArrangement = Arrangement.spacedBy(gridGutter)
+                ) {
+                    Column(
                         Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.End
+                            .fillMaxHeight()
+                            .width(this@BoxWithConstraints.minWidth * 0.66f),
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Tune,
-                            contentDescription = "Filter icon"
+                        HomeCard(
+                            data = SampleItemsData[0],
+                            modifier = Modifier
+                                .align(Alignment.End)
+                                .fillMaxWidth(0.8f)
+                        )
+                        Spacer(Modifier.height(40.dp))
+                        HomeCard(
+                            data = SampleItemsData[1],
+                            modifier = Modifier
+                                .fillMaxWidth(0.8f)
                         )
                     }
-                    BoxWithConstraints(
+                    Column(
                         Modifier
-                            .fillMaxSize()
-                            .padding(start = 16.dp)
-                            .horizontalScroll(rememberScrollState())
+                            .fillMaxHeight()
+                            .width(this@BoxWithConstraints.minWidth * 0.66f - gridGutter),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        val gridGutter = 16.dp
-                        Row(
-                            Modifier
-                                .fillMaxSize(),
-                            horizontalArrangement = Arrangement.spacedBy(gridGutter)
-                        ) {
-                            Column(
-                                Modifier
-                                    .fillMaxHeight()
-                                    .width(this@BoxWithConstraints.minWidth * 0.66f),
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                HomeCard(
-                                    data = SampleItemsData[0],
-                                    modifier = Modifier
-                                        .align(Alignment.End)
-                                        .fillMaxWidth(0.8f)
-                                )
-                                Spacer(Modifier.height(40.dp))
-                                HomeCard(
-                                    data = SampleItemsData[1],
-                                    modifier = Modifier
-                                        .fillMaxWidth(0.8f)
-                                )
-                            }
-                            Column(
-                                Modifier
-                                    .fillMaxHeight()
-                                    .width(this@BoxWithConstraints.minWidth * 0.66f - gridGutter),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                HomeCard(
-                                    data = SampleItemsData[3],
-                                    modifier = Modifier.fillMaxWidth(0.66f)
-                                )
-                            }
-                            Column(
-                                Modifier
-                                    .fillMaxHeight()
-                                    .width(this@BoxWithConstraints.minWidth * 0.66f),
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                HomeCard(
-                                    data = SampleItemsData[2],
-                                    modifier = Modifier
-                                        .align(Alignment.Start)
-                                        .fillMaxWidth(0.8f)
-                                )
-                                Spacer(Modifier.height(40.dp))
-                                HomeCard(
-                                    data = SampleItemsData[4],
-                                    modifier = Modifier
-                                        .align(Alignment.End)
-                                        .fillMaxWidth(0.8f)
-                                )
-                            }
-                            Column(
-                                Modifier
-                                    .fillMaxHeight()
-                                    .width(this@BoxWithConstraints.minWidth * 0.66f - gridGutter),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                HomeCard(
-                                    data = SampleItemsData[5],
-                                    modifier = Modifier.fillMaxWidth(0.66f)
-                                )
-                            }
-                        }
+                        HomeCard(
+                            data = SampleItemsData[3],
+                            modifier = Modifier.fillMaxWidth(0.66f)
+                        )
+                    }
+                    Column(
+                        Modifier
+                            .fillMaxHeight()
+                            .width(this@BoxWithConstraints.minWidth * 0.66f),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        HomeCard(
+                            data = SampleItemsData[2],
+                            modifier = Modifier
+                                .align(Alignment.Start)
+                                .fillMaxWidth(0.8f)
+                        )
+                        Spacer(Modifier.height(40.dp))
+                        HomeCard(
+                            data = SampleItemsData[4],
+                            modifier = Modifier
+                                .align(Alignment.End)
+                                .fillMaxWidth(0.8f)
+                        )
+                    }
+                    Column(
+                        Modifier
+                            .fillMaxHeight()
+                            .width(this@BoxWithConstraints.minWidth * 0.66f - gridGutter),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        HomeCard(
+                            data = SampleItemsData[5],
+                            modifier = Modifier.fillMaxWidth(0.66f)
+                        )
                     }
                 }
             }
@@ -182,6 +157,14 @@ fun HomeCard(
         Text("${data.title}", style = MaterialTheme.typography.subtitle2)
         Spacer(Modifier.height(8.dp))
         Text("\$${data.price}", style = MaterialTheme.typography.body2)
+    }
+}
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 640)
+@Composable
+fun HomeScreenPreview() {
+    EmptyComposeTheme {
+        HomeScreen()
     }
 }
 
