@@ -1,4 +1,4 @@
-package com.example.emptycompose
+package com.google.adux.shrine
 
 import org.junit.Test
 

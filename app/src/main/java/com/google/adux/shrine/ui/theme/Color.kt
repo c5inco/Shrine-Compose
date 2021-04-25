@@ -1,4 +1,4 @@
-package com.example.emptycompose.ui.theme
+package com.google.adux.shrine.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

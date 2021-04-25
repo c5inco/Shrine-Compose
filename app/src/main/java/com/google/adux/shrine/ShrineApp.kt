@@ -1,4 +1,4 @@
-package com.example.emptycompose
+package com.google.adux.shrine
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.emptycompose.ui.theme.EmptyComposeTheme
+import com.google.adux.shrine.ui.theme.EmptyComposeTheme
 
 @ExperimentalAnimationApi
 @Composable

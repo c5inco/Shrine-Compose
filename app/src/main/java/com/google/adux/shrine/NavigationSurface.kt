@@ -1,4 +1,4 @@
-package com.example.emptycompose
+package com.google.adux.shrine
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.emptycompose.ui.theme.EmptyComposeTheme
+import com.google.adux.shrine.ui.theme.EmptyComposeTheme
 
 private enum class Visibility {
     VISIBLE,

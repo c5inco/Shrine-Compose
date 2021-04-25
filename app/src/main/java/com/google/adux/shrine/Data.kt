@@ -1,4 +1,4 @@
-package com.example.emptycompose
+package com.google.adux.shrine
 
 data class HomeCardData(
     val title: String,
