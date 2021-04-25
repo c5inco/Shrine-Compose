@@ -5,10 +5,12 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,8 +52,13 @@ fun NavigationSurface(
                 val duration = 500
                 Box(
                     Modifier
-                        .width(48.dp)
-                        .clickable { onToggle(!inForeground) },
+                        .width(56.dp)
+                        .fillMaxHeight()
+                        .clickable(
+                            onClick = { onToggle(!inForeground) },
+                            indication = rememberRipple(bounded = false, radius = 56.dp),
+                            interactionSource = remember { MutableInteractionSource() }
+                        ),
                     contentAlignment = Alignment.CenterStart
                 ) {
                     // TODO: Figure out if AnimatedVisibility and animate*AsState are on different clocks
@@ -96,11 +103,11 @@ fun NavigationSurface(
                         contentDescription = "Shrine logo",
                         tint = MaterialTheme.colors.onBackground,
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(28.dp)
                             .offset(x = logoOffset)
                     )
                 }
-                Spacer(Modifier.width(8.dp))
+
                 Box {
                     val menuNameTransition = updateTransition(
                         targetState = if (inForeground) Visibility.VISIBLE else Visibility.GONE,
