@@ -14,7 +14,7 @@ fun ShrineApp() {
     EmptyComposeTheme {
         Box {
             NavigationSurface()
-            HomeScreen(modifier = Modifier.offset(y = 54.dp))
+            HomeScreen(modifier = Modifier.offset(y = 56.dp))
         }
     }
 }

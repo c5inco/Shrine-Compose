@@ -23,6 +23,12 @@ val Typography = Typography(
         fontSize = 20.sp,
         letterSpacing = 0.15.sp
     ),
+    subtitle1 = TextStyle(
+        fontFamily = Rubik,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        letterSpacing = 0.15.sp
+    ),
     subtitle2 = TextStyle(
         fontFamily = Rubik,
         fontWeight = FontWeight.Medium,
