@@ -1,25 +1,41 @@
 package com.example.emptycompose
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.emptycompose.ui.theme.EmptyComposeTheme
 
+@ExperimentalAnimationApi
 @Composable
 fun ShrineApp() {
     EmptyComposeTheme {
-        Box {
-            NavigationSurface()
-            HomeScreen(modifier = Modifier.offset(y = 56.dp))
+        var showMenu by remember { mutableStateOf(false) }
+
+        BoxWithConstraints(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            val screenOffsetState by animateDpAsState(targetValue = if (showMenu) (maxHeight.value - 56).dp else 56.dp)
+
+            NavigationSurface(
+                inForeground = showMenu,
+                onToggle = {
+                    showMenu = it
+                }
+            )
+            HomeScreen(modifier = Modifier.offset(y = screenOffsetState))
         }
     }
 }
 
 @Preview(device = Devices.PIXEL_4)
+@ExperimentalAnimationApi
 @Composable
 fun ShrineAppPreview() {
     ShrineApp()
