@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.adux.shrine.ui.theme.EmptyComposeTheme
+import com.google.adux.shrine.ui.theme.ShrineTheme
 
 private enum class Visibility {
     VISIBLE,
@@ -48,7 +48,7 @@ fun NavigationSurface(
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
     ) {
-        TopAppBar(
+        InsetAwareTopAppBar(
             title = {
                 val duration = 500
                 Box(
@@ -247,7 +247,7 @@ fun NavItem(
 @ExperimentalAnimationApi
 @Composable
 fun NavigationSurfacePreview() {
-    EmptyComposeTheme {
+    ShrineTheme {
         var toggle by remember { mutableStateOf(true) }
         var activeScreen by remember { mutableStateOf(Screens.Home) }
         NavigationSurface(

@@ -32,7 +32,7 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun EmptyComposeTheme(
+fun ShrineTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
@@ -53,7 +53,7 @@ fun EmptyComposeTheme(
 @Preview(widthDp = 360)
 @Composable
 fun ThemePreview() {
-    EmptyComposeTheme {
+    ShrineTheme {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

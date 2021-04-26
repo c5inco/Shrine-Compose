@@ -4,13 +4,25 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.core.view.WindowCompat
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.adux.shrine.ui.theme.ShrineTheme
 
 class MainActivity : ComponentActivity() {
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Turn off the decor fitting system windows, which means we need to through handling
+        // insets
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
-            ShrineApp()
+            ShrineTheme {
+                ProvideWindowInsets {
+                    ShrineApp()
+                }
+            }
         }
     }
 }
