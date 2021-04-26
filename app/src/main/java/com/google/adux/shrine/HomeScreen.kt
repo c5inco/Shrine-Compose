@@ -130,7 +130,7 @@ fun HomeCard(
     ) {
         Box {
             Image(
-                painter = painterResource(id = getPhotoResId(data.photo)),
+                painter = painterResource(id = data.photo),
                 contentDescription = "Image description of photo",
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier.fillMaxWidth()

@@ -1,10 +1,12 @@
 package com.google.adux.shrine
 
 data class HomeCardData(
+    val id: Int,
     val title: String,
     val price: Int,
     val vendor: Vendor,
-    val photo: SamplePhoto,
+    val category: Category,
+    val photo: Int,
 )
 
 enum class Vendor {
@@ -13,6 +15,12 @@ enum class Vendor {
     Mal,
     Six,
     Squiggle,
+}
+
+enum class Category {
+    Accessories,
+    Clothing,
+    Home
 }
 
 enum class SamplePhoto {
@@ -44,64 +52,53 @@ fun getVendorResId(vendor: Vendor): Int {
     }
 }
 
-fun getPhotoResId(photo: SamplePhoto): Int {
-    when(photo) {
-        SamplePhoto.Bamboo -> {
-            return R.drawable.photo_bamboo
-        }
-        SamplePhoto.Dusty -> {
-            return R.drawable.photo_dusty
-        }
-        SamplePhoto.Flow -> {
-            return R.drawable.photo_flow
-        }
-        SamplePhoto.High -> {
-            return R.drawable.photo_high
-        }
-        SamplePhoto.Hopscotch -> {
-            return R.drawable.photo_hopscotch
-        }
-        else -> {
-            return R.drawable.photo_ok
-        }
-    }
-}
-
 val SampleItemsData = listOf(
     HomeCardData(
+        id = 0,
         title = "High Tea Cups",
         price = 36,
         vendor = Vendor.Six,
-        photo = SamplePhoto.High
+        category = Category.Accessories,
+        photo = R.drawable.photo_0
     ),
     HomeCardData(
+        id = 1,
         title = "Hopscotch Shoes",
         price = 134,
         vendor = Vendor.Mal,
-        photo = SamplePhoto.Hopscotch
+        category = Category.Accessories,
+        photo = R.drawable.photo_1
     ),
     HomeCardData(
+        id = 2,
         title = "Dusty Pink Satchel",
         price = 133,
         vendor = Vendor.Squiggle,
-        photo = SamplePhoto.Dusty
+        category = Category.Accessories,
+        photo = R.drawable.photo_2
     ),
     HomeCardData(
+        id = 3,
         title = "OK Glow Lamp",
         price = 20,
         vendor = Vendor.Alphi,
-        photo = SamplePhoto.Ok
+        category = Category.Accessories,
+        photo = R.drawable.photo_3
     ),
     HomeCardData(
+        id = 4,
         title = "Bamboo Turntables",
         price = 133,
         vendor = Vendor.Squiggle,
-        photo = SamplePhoto.Bamboo
+        category = Category.Accessories,
+        photo = R.drawable.photo_4
     ),
     HomeCardData(
+        id = 5,
         title = "Flow Shirt Blouse",
         price = 240,
         vendor = Vendor.Lmb,
-        photo = SamplePhoto.Flow
+        category = Category.Accessories,
+        photo = R.drawable.photo_5
     ),
 )
