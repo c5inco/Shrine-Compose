@@ -3,7 +3,6 @@ package com.google.adux.shrine
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -43,173 +42,174 @@ fun NavigationSurface(
     onToggle: (Boolean) -> Unit = {},
     onNavigate: (Screens) -> Unit = {}
 ) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.background)
+    Surface(
+        Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background
     ) {
-        InsetAwareTopAppBar(
-            title = {
-                val duration = 500
-                Box(
-                    Modifier
-                        .width(56.dp)
-                        .fillMaxHeight()
-                        .clickable(
-                            onClick = { onToggle(!inForeground) },
-                            indication = rememberRipple(bounded = false, radius = 56.dp),
-                            interactionSource = remember { MutableInteractionSource() }
-                        ),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    // TODO: Figure out if AnimatedVisibility and animate*AsState are on different clocks
+        Column {
+            InsetAwareTopAppBar(
+                title = {
+                    val duration = 500
+                    Box(
+                        Modifier
+                            .width(56.dp)
+                            .fillMaxHeight()
+                            .clickable(
+                                onClick = { onToggle(!inForeground) },
+                                indication = rememberRipple(bounded = false, radius = 56.dp),
+                                interactionSource = remember { MutableInteractionSource() }
+                            ),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        // TODO: Figure out if AnimatedVisibility and animate*AsState are on different clocks
 
-                    val menuIconTransition = updateTransition(
-                        targetState = if (inForeground) Visibility.VISIBLE else Visibility.GONE,
-                        label = "menuIconTransition"
-                    )
-                    val logoOffset by menuIconTransition.animateDp(
-                        label = "logoOffset",
-                        transitionSpec = {
-                            when {
-                                Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
-                                    tween(durationMillis = 300, easing = LinearEasing)
-                                else ->
-                                    tween(durationMillis = 300)
+                        val menuIconTransition = updateTransition(
+                            targetState = if (inForeground) Visibility.VISIBLE else Visibility.GONE,
+                            label = "menuIconTransition"
+                        )
+                        val logoOffset by menuIconTransition.animateDp(
+                            label = "logoOffset",
+                            transitionSpec = {
+                                when {
+                                    Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
+                                        tween(durationMillis = 300, easing = LinearEasing)
+                                    else ->
+                                        tween(durationMillis = 300)
+                                }
                             }
+                        ) {
+                            if (it == Visibility.GONE) 24.dp else 0.dp
                         }
-                    ) {
-                        if (it == Visibility.GONE) 24.dp else 0.dp
-                    }
-                    val menuIconAlpha by menuIconTransition.animateFloat(
-                        label = "menuIconAlpha",
-                        transitionSpec = {
-                            tween(durationMillis = 300)
+                        val menuIconAlpha by menuIconTransition.animateFloat(
+                            label = "menuIconAlpha",
+                            transitionSpec = {
+                                tween(durationMillis = 300)
+                            }
+                        ) {
+                            if (it == Visibility.VISIBLE) 0f else 1f
                         }
-                    ) {
-                        if (it == Visibility.VISIBLE) 0f else 1f
-                    }
 
-                    if (!inForeground) {
+                        if (!inForeground) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_menu_cut_24px),
+                                contentDescription = "Menu icon",
+                                tint = MaterialTheme.colors.onBackground,
+                                modifier = Modifier.alpha(menuIconAlpha)
+                            )
+                        }
+
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_menu_cut_24px),
-                            contentDescription = "Menu icon",
+                            painter = painterResource(id = R.drawable.ic_shrine_logo),
+                            contentDescription = "Shrine logo",
                             tint = MaterialTheme.colors.onBackground,
-                            modifier = Modifier.alpha(menuIconAlpha)
+                            modifier = Modifier
+                                .size(28.dp)
+                                .offset(x = logoOffset)
                         )
                     }
 
+                    Box {
+                        val menuNameTransition = updateTransition(
+                            targetState = if (inForeground) Visibility.VISIBLE else Visibility.GONE,
+                            label = "menuNameTransition"
+                        )
+                        val menuNameOffset by menuNameTransition.animateDp(
+                            label = "menuNameOffset",
+                            transitionSpec = {
+                                when {
+                                    Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
+                                        tween(durationMillis = 300, easing = LinearEasing)
+                                    else ->
+                                        tween(durationMillis = 300)
+                                }
+                            }
+                        ) {
+                            if (it == Visibility.GONE) 20.dp else 0.dp
+                        }
+                        val menuNameAlpha by menuNameTransition.animateFloat(
+                            label = "menuNameAlpha",
+                            transitionSpec = {
+                                tween(durationMillis = 300)
+                            }
+                        ) {
+                            if (it == Visibility.GONE) 0f else 1f
+                        }
+
+                        Text(
+                            "Menu".toUpperCase(),
+                            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Normal),
+                            modifier = Modifier
+                                .offset(x = menuNameOffset)
+                                .alpha(menuNameAlpha)
+                        )
+
+                        val shrineNameTransition = updateTransition(
+                            targetState = if (!inForeground) Visibility.VISIBLE else Visibility.GONE,
+                            label = "shrineNameTransition"
+                        )
+                        val shrineNameOffset by shrineNameTransition.animateDp(
+                            label = "shrineNameOffset",
+                            transitionSpec = {
+                                when {
+                                    Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
+                                        tween(durationMillis = 500)
+                                    else ->
+                                        tween(durationMillis = 300)
+                                }
+                            }
+                        ) {
+                            if (it == Visibility.GONE) -10.dp else 0.dp
+                        }
+                        val shrineNameAlpha by shrineNameTransition.animateFloat(
+                            label = "shrineNameAlpha",
+                            transitionSpec = {
+                                tween(durationMillis = 300)
+                            }
+                        ) {
+                            if (it == Visibility.GONE) 0f else 1f
+                        }
+
+                        Text(
+                            "Shrine".toUpperCase(),
+                            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Normal),
+                            modifier = Modifier
+                                .offset(x = shrineNameOffset)
+                                .alpha(shrineNameAlpha)
+                        )
+                    }
+                },
+                backgroundColor = MaterialTheme.colors.background,
+                actions = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_shrine_logo),
-                        contentDescription = "Shrine logo",
-                        tint = MaterialTheme.colors.onBackground,
-                        modifier = Modifier
-                            .size(28.dp)
-                            .offset(x = logoOffset)
+                        imageVector = Icons.Outlined.Search,
+                        contentDescription = "Search icon"
                     )
+                    Spacer(Modifier.width(12.dp))
+                },
+                elevation = 0.dp
+            )
+            Column(
+                Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Spacer(Modifier.height(20.dp))
+                NavItem(Screens.All, Screens.All == activeScreen) {
+                    onNavigate(it)
                 }
-
-                Box {
-                    val menuNameTransition = updateTransition(
-                        targetState = if (inForeground) Visibility.VISIBLE else Visibility.GONE,
-                        label = "menuNameTransition"
-                    )
-                    val menuNameOffset by menuNameTransition.animateDp(
-                        label = "menuNameOffset",
-                        transitionSpec = {
-                            when {
-                                Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
-                                    tween(durationMillis = 300, easing = LinearEasing)
-                                else ->
-                                    tween(durationMillis = 300)
-                            }
-                        }
-                    ) {
-                        if (it == Visibility.GONE) 20.dp else 0.dp
-                    }
-                    val menuNameAlpha by menuNameTransition.animateFloat(
-                        label = "menuNameAlpha",
-                        transitionSpec = {
-                            tween(durationMillis = 300)
-                        }
-                    ) {
-                        if (it == Visibility.GONE) 0f else 1f
-                    }
-
-                    Text(
-                        "Menu".toUpperCase(),
-                        style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Normal),
-                        modifier = Modifier
-                            .offset(x = menuNameOffset)
-                            .alpha(menuNameAlpha)
-                    )
-
-                    val shrineNameTransition = updateTransition(
-                        targetState = if (!inForeground) Visibility.VISIBLE else Visibility.GONE,
-                        label = "shrineNameTransition"
-                    )
-                    val shrineNameOffset by shrineNameTransition.animateDp(
-                        label = "shrineNameOffset",
-                        transitionSpec = {
-                            when {
-                                Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
-                                    tween(durationMillis = 500)
-                                else ->
-                                    tween(durationMillis = 300)
-                            }
-                        }
-                    ) {
-                        if (it == Visibility.GONE) -10.dp else 0.dp
-                    }
-                    val shrineNameAlpha by shrineNameTransition.animateFloat(
-                        label = "shrineNameAlpha",
-                        transitionSpec = {
-                            tween(durationMillis = 300)
-                        }
-                    ) {
-                        if (it == Visibility.GONE) 0f else 1f
-                    }
-
-                    Text(
-                        "Shrine".toUpperCase(),
-                        style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Normal),
-                        modifier = Modifier
-                            .offset(x = shrineNameOffset)
-                            .alpha(shrineNameAlpha)
-                    )
+                NavItem(Screens.Accessories, Screens.Accessories == activeScreen) {
+                    onNavigate(it)
                 }
-            },
-            backgroundColor = MaterialTheme.colors.background,
-            actions = {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = "Search icon"
-                )
-                Spacer(Modifier.width(12.dp))
-            },
-            elevation = 0.dp
-        )
-        Column(
-            Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Spacer(Modifier.height(20.dp))
-            NavItem(Screens.All, Screens.All == activeScreen) {
-                onNavigate(it)
-            }
-            NavItem(Screens.Accessories, Screens.Accessories == activeScreen) {
-                onNavigate(it)
-            }
-            NavItem(Screens.Clothing, Screens.Clothing == activeScreen) {
-                onNavigate(it)
-            }
-            NavItem(Screens.Home, Screens.Home == activeScreen) {
-                onNavigate(it)
-            }
-            Divider(Modifier.width(56.dp))
-            NavItem(Screens.Logout, Screens.Logout == activeScreen) {
-                onNavigate(it)
+                NavItem(Screens.Clothing, Screens.Clothing == activeScreen) {
+                    onNavigate(it)
+                }
+                NavItem(Screens.Home, Screens.Home == activeScreen) {
+                    onNavigate(it)
+                }
+                Divider(Modifier.width(56.dp), color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled))
+                NavItem(Screens.Logout, Screens.Logout == activeScreen) {
+                    onNavigate(it)
+                }
             }
         }
     }
@@ -248,6 +248,26 @@ fun NavItem(
 @Composable
 fun NavigationSurfacePreview() {
     ShrineTheme {
+        var toggle by remember { mutableStateOf(true) }
+        var activeScreen by remember { mutableStateOf(Screens.Home) }
+        NavigationSurface(
+            inForeground = toggle,
+            activeScreen = activeScreen,
+            onToggle = {
+                toggle = it
+            },
+            onNavigate = {
+                activeScreen = it
+            }
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 640)
+@ExperimentalAnimationApi
+@Composable
+fun NavigationSurfaceDarkPreview() {
+    ShrineTheme(darkTheme = true) {
         var toggle by remember { mutableStateOf(true) }
         var activeScreen by remember { mutableStateOf(Screens.Home) }
         NavigationSurface(
