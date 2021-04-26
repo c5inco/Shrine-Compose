@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.adux.shrine.ui.theme.ShrineTheme
@@ -50,7 +51,8 @@ fun ShrineApp() {
                     }
                 }
             ) {
-                if (it == ScreenState.Collapsed) (maxHeight.value - 56).dp else 56.dp
+                val navBarHeight = LocalWindowInsets.current.navigationBars.bottom
+                if (it == ScreenState.Collapsed) (maxHeight.value - 56 - navBarHeight).dp else (56).dp
             }
 
             NavigationSurface(
