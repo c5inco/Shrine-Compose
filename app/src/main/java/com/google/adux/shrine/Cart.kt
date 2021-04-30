@@ -3,10 +3,8 @@ package com.google.adux.shrine
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -17,10 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.adux.shrine.ui.theme.ShrineTheme
 
 @Composable
 fun Cart(
@@ -30,27 +31,51 @@ fun Cart(
     maxWidth: Dp,
     onExpand: (Boolean) -> Unit = {}
 ) {
-    //var expanded by remember { mutableStateOf(false) }
+    val cartOpenTransition = updateTransition(
+        targetState = if (expanded) CartState.Opened else CartState.Closed,
+        label = "cartTransition"
+    )
+    val cartWidth by cartOpenTransition.animateDp(
+        label = "cartWidth",
+        transitionSpec = {
+            when {
+                CartState.Opened isTransitioningTo CartState.Closed ->
+                    tween(durationMillis = 433, delayMillis = 67)
+                else ->
+                    tween(durationMillis = 150)
+            }
+        }
+    ) {
+        if (it == CartState.Opened) maxWidth else 200.dp
+    }
 
-    val cornerSize by animateDpAsState(
-        targetValue = if (expanded) 0.dp else 24.dp
-    )
-    val cartHeight by animateDpAsState(
-        targetValue = if (expanded) maxHeight else (36 + LocalWindowInsets.current.navigationBars.bottom).dp,
-        animationSpec =
-        if (expanded)
-            tween(durationMillis = 200, easing = FastOutLinearInEasing)
-        else
-            spring(stiffness = Spring.StiffnessMedium)
-    )
-    val cartWidth by animateDpAsState(
-        targetValue = if (expanded) maxWidth else 200.dp,
-        animationSpec =
-        if (expanded)
-            spring(stiffness = Spring.StiffnessMedium)
-        else
-            tween(durationMillis = 200, easing = FastOutLinearInEasing)
-    )
+    val cartHeight by cartOpenTransition.animateDp(
+        label = "cartHeight",
+        transitionSpec = {
+            when {
+                CartState.Opened isTransitioningTo CartState.Closed ->
+                    tween(durationMillis = 283)
+                else ->
+                    tween(durationMillis = 500)
+            }
+        }
+    ) {
+        if (it == CartState.Opened) maxHeight else (36 + LocalWindowInsets.current.navigationBars.bottom).dp
+    }
+
+    val cornerSize by cartOpenTransition.animateDp(
+        label = "cartCornerSize",
+        transitionSpec = {
+            when {
+                CartState.Opened isTransitioningTo CartState.Closed ->
+                    tween(durationMillis = 433, delayMillis = 67)
+                else ->
+                    tween(durationMillis = 150)
+            }
+        }
+    ) {
+        if (it == CartState.Opened) 0.dp else 24.dp
+    }
 
     Surface(
         modifier
@@ -58,9 +83,11 @@ fun Cart(
             .clip(CutCornerShape(topStart = cornerSize))
             .height(cartHeight)
             .width(cartWidth)
-            .clickable {
-                onExpand(!expanded)
-            },
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { onExpand(!expanded) }
+            ),
         color = MaterialTheme.colors.secondary
     ) {
         Row(
@@ -72,4 +99,28 @@ fun Cart(
             Text("Hello")
         }
     }
+}
+
+@Preview(showBackground = true, device = Devices.PIXEL_4)
+@Composable
+fun CartPreview() {
+    var showCart by remember { mutableStateOf(false) }
+
+    ShrineTheme {
+        BoxWithConstraints(Modifier.fillMaxSize()) {
+            Cart(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                expanded = showCart,
+                maxWidth = maxWidth,
+                maxHeight = maxHeight
+            ) {
+                showCart = it
+            }
+        }
+    }
+}
+
+private enum class CartState {
+    Closed,
+    Opened,
 }
