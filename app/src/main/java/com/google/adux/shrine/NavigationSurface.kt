@@ -188,27 +188,33 @@ fun NavigationSurface(
                 },
                 elevation = 0.dp
             )
-            Column(
-                Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Spacer(Modifier.height(20.dp))
-                NavItem(Screens.All, Screens.All == activeScreen) {
-                    onNavigate(it)
-                }
-                NavItem(Screens.Accessories, Screens.Accessories == activeScreen) {
-                    onNavigate(it)
-                }
-                NavItem(Screens.Clothing, Screens.Clothing == activeScreen) {
-                    onNavigate(it)
-                }
-                NavItem(Screens.Home, Screens.Home == activeScreen) {
-                    onNavigate(it)
-                }
-                Divider(Modifier.width(56.dp), color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled))
-                NavItem(Screens.Logout, Screens.Logout == activeScreen) {
-                    onNavigate(it)
+
+            if (inForeground) {
+                Column(
+                    Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Spacer(Modifier.height(20.dp))
+                    NavItem(Screens.All, Screens.All == activeScreen) {
+                        onNavigate(it)
+                    }
+                    NavItem(Screens.Accessories, Screens.Accessories == activeScreen) {
+                        onNavigate(it)
+                    }
+                    NavItem(Screens.Clothing, Screens.Clothing == activeScreen) {
+                        onNavigate(it)
+                    }
+                    NavItem(Screens.Home, Screens.Home == activeScreen) {
+                        onNavigate(it)
+                    }
+                    Divider(
+                        Modifier.width(56.dp),
+                        color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+                    )
+                    NavItem(Screens.Logout, Screens.Logout == activeScreen) {
+                        onNavigate(it)
+                    }
                 }
             }
         }
