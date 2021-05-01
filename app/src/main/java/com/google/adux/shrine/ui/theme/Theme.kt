@@ -43,7 +43,7 @@ fun ShrineTheme(
     }
 
     MaterialTheme(
-        colors = colors,
+        colors = LightColorPalette,
         typography = Typography,
         shapes = Shapes,
         content = content
