@@ -198,7 +198,8 @@ fun NavigationSurface(
                 actions = {
                     Icon(
                         imageVector = Icons.Outlined.Search,
-                        contentDescription = "Search icon"
+                        contentDescription = "Search icon",
+                        tint = LocalContentColor.current.copy(alpha = ContentAlpha.high)
                     )
                     Spacer(Modifier.width(12.dp))
                 },
