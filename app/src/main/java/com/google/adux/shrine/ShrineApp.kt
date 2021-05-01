@@ -1,7 +1,10 @@
 package com.google.adux.shrine
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ContentAlpha
@@ -12,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
@@ -25,6 +27,7 @@ import com.google.adux.shrine.ui.theme.ShrineTheme
 fun ShrineApp() {
     val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
+    val TOP_APPBAR_HEIGHT = 56
 
     SideEffect {
         systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
@@ -55,7 +58,7 @@ fun ShrineApp() {
                 }
             ) {
                 val navBarHeight = LocalWindowInsets.current.navigationBars.bottom
-                if (it == ScreenState.Collapsed) (maxHeight.value - 56 - navBarHeight).dp else (56).dp
+                if (it == ScreenState.Collapsed) (maxHeight.value - TOP_APPBAR_HEIGHT - navBarHeight).dp else (TOP_APPBAR_HEIGHT).dp
             }
 
             NavigationSurface(
@@ -66,6 +69,7 @@ fun ShrineApp() {
             )
             HomeScreen(
                 modifier = Modifier
+                    .height((maxHeight.value - TOP_APPBAR_HEIGHT).dp)
                     .statusBarsPadding()
                     .offset(y = screenOffset),
                 onAddToCart = {
@@ -150,7 +154,7 @@ fun ShrineApp() {
     }
 }
 
-@Preview(device = Devices.PIXEL_4)
+@Preview(widthDp = 360, heightDp = 640)
 @ExperimentalAnimationApi
 @Composable
 fun ShrineAppPreview() {

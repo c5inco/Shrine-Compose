@@ -24,16 +24,14 @@ fun HomeScreen(
     onAddToCart: (ItemData) -> Unit = {}
 ) {
     Surface(
-        modifier.fillMaxSize(),
+        modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
         elevation = 16.dp
     ) {
-        Column {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.End
+        Box(Modifier.fillMaxSize()) {
+            IconButton(
+                modifier = Modifier.align(Alignment.TopEnd),
+                onClick = {}
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Tune,
@@ -48,8 +46,7 @@ fun HomeScreen(
             ) {
                 val gridGutter = 16.dp
                 Row(
-                    Modifier
-                        .fillMaxSize(),
+                    Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.spacedBy(gridGutter)
                 ) {
                     Column(
@@ -160,6 +157,7 @@ fun HomeCard(
         Text("${data.title}", style = MaterialTheme.typography.subtitle2)
         Spacer(Modifier.height(8.dp))
         Text("\$${data.price}", style = MaterialTheme.typography.body2)
+        Spacer(Modifier.height(8.dp))
     }
 }
 
