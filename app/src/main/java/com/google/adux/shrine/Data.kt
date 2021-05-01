@@ -1,12 +1,12 @@
 package com.google.adux.shrine
 
-data class HomeCardData(
+data class ItemData(
     val id: Int,
     val title: String,
     val price: Int,
     val vendor: Vendor,
     val category: Category,
-    val photo: Int,
+    val photoResId: Int,
 )
 
 enum class Vendor {
@@ -53,52 +53,52 @@ fun getVendorResId(vendor: Vendor): Int {
 }
 
 val SampleItemsData = listOf(
-    HomeCardData(
+    ItemData(
         id = 0,
         title = "High Tea Cups",
         price = 36,
         vendor = Vendor.Six,
         category = Category.Accessories,
-        photo = R.drawable.photo_0
+        photoResId = R.drawable.photo_0
     ),
-    HomeCardData(
+    ItemData(
         id = 1,
         title = "Hopscotch Shoes",
         price = 134,
         vendor = Vendor.Mal,
         category = Category.Accessories,
-        photo = R.drawable.photo_1
+        photoResId = R.drawable.photo_1
     ),
-    HomeCardData(
+    ItemData(
         id = 2,
         title = "Dusty Pink Satchel",
         price = 133,
         vendor = Vendor.Squiggle,
         category = Category.Accessories,
-        photo = R.drawable.photo_2
+        photoResId = R.drawable.photo_2
     ),
-    HomeCardData(
+    ItemData(
         id = 3,
         title = "OK Glow Lamp",
         price = 20,
         vendor = Vendor.Alphi,
         category = Category.Accessories,
-        photo = R.drawable.photo_3
+        photoResId = R.drawable.photo_3
     ),
-    HomeCardData(
+    ItemData(
         id = 4,
         title = "Bamboo Turntables",
         price = 133,
         vendor = Vendor.Squiggle,
         category = Category.Accessories,
-        photo = R.drawable.photo_4
+        photoResId = R.drawable.photo_4
     ),
-    HomeCardData(
+    ItemData(
         id = 5,
         title = "Flow Shirt Blouse",
         price = 240,
         vendor = Vendor.Lmb,
         category = Category.Accessories,
-        photo = R.drawable.photo_5
+        photoResId = R.drawable.photo_5
     ),
 )

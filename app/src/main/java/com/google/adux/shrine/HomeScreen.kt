@@ -121,7 +121,7 @@ fun HomeScreen(
 
 @Composable
 fun HomeCard(
-    data: HomeCardData,
+    data: ItemData,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -130,7 +130,7 @@ fun HomeCard(
     ) {
         Box {
             Image(
-                painter = painterResource(id = data.photo),
+                painter = painterResource(id = data.photoResId),
                 contentDescription = "Image description of photo",
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier.fillMaxWidth()
