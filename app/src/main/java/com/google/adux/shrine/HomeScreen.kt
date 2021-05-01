@@ -1,6 +1,7 @@
 package com.google.adux.shrine
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -19,7 +20,8 @@ import com.google.adux.shrine.ui.theme.ShrineTheme
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onAddToCart: (ItemData) -> Unit = {}
 ) {
     Surface(
         modifier.fillMaxSize(),
@@ -78,7 +80,10 @@ fun HomeScreen(
                     ) {
                         HomeCard(
                             data = SampleItemsData[3],
-                            modifier = Modifier.fillMaxWidth(0.66f)
+                            modifier = Modifier.fillMaxWidth(0.66f),
+                            onClick = {
+                                onAddToCart(it)
+                            }
                         )
                     }
                     Column(
@@ -122,10 +127,11 @@ fun HomeScreen(
 @Composable
 fun HomeCard(
     data: ItemData,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (ItemData) -> Unit = {}
 ) {
     Column(
-        modifier,
+        modifier.clickable { onClick(data) },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box {

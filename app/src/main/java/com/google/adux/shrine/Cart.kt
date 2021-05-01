@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -29,20 +29,23 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.adux.shrine.ui.theme.ShrineTheme
+import kotlin.math.max
+import kotlin.math.min
 
 @ExperimentalAnimationApi
 @Composable
 fun Cart(
     modifier: Modifier = Modifier,
+    items: List<ItemData> = SampleItemsData,
     expanded: Boolean = false,
     hidden: Boolean = false,
     maxHeight: Dp,
     maxWidth: Dp,
-    onExpand: (Boolean) -> Unit = {}
+    onRemoveItem: (Int) -> Unit = {},
+    onExpand: (Boolean) -> Unit = {},
 ) {
     val cartOpenTransition = updateTransition(
         targetState = if (hidden) CartState.Hidden else if (expanded) CartState.Opened else CartState.Closed,
@@ -70,7 +73,10 @@ fun Cart(
         else if (it == CartState.Opened) {
             0.dp
         } else {
-            (maxWidth.value - (24 + 40 * 3 + 16 * 2 + 16)).dp
+            val size = min(3, items.size)
+            var width = 24 + 40 * (size + 1) + 16 * size + 16
+            if (items.size > 3) width += 24 + 16
+            (maxWidth.value - (width)).dp
         }
     }
 
@@ -127,7 +133,10 @@ fun Cart(
     ) {
         Box {
             // Collapsed cart
-            CollapsedCart(collapsedCartAlpha) {
+            CollapsedCart(
+                items = items,
+                alpha = collapsedCartAlpha
+            ) {
                 onExpand(true)
             }
 
@@ -137,7 +146,12 @@ fun Cart(
                 enter = fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)),
                 exit = fadeOut(animationSpec = tween(durationMillis = 117, easing = LinearEasing))
             ) {
-                ExpandedCart {
+                ExpandedCart(
+                    items = items,
+                    onRemoveItem = {
+                        onRemoveItem(it)
+                    }
+                ) {
                     onExpand(false)
                 }
             }
@@ -145,9 +159,11 @@ fun Cart(
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
 private fun CollapsedCart(
-    collapsedCartAlpha: Float,
+    items: List<ItemData> = SampleItemsData.subList(fromIndex = 0, toIndex = 3),
+    alpha: Float,
     onClick: () -> Unit
 ) {
     Row(
@@ -155,22 +171,61 @@ private fun CollapsedCart(
             .clickable { onClick() }
             .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp)
             .navigationBarsPadding()
-            .alpha(collapsedCartAlpha),
+            .alpha(alpha),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Icon(
-            imageVector = Icons.Default.ShoppingCart,
-            contentDescription = "Shopping cart icon",
-            modifier = Modifier.padding(horizontal = 8.dp)
-        )
-        CollapsedCartItem(data = SampleItemsData[0])
-        CollapsedCartItem(data = SampleItemsData[1])
+        Box(
+            Modifier.size(40.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.ShoppingCart,
+                contentDescription = "Shopping cart icon",
+            )
+        }
+        for (i in 0 until min(3, items.size)) {
+            key(i) {
+                CollapsedCartItem(data = items[i])
+            }
+        }
+        if (items.size > 3) {
+            Box(
+                Modifier.size(width = 24.dp, height = 40.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "+${items.size - 3}",
+                    style = MaterialTheme.typography.subtitle2,
+                )
+            }
+        }
     }
 }
 
 @Composable
 private fun CollapsedCartItem(data: ItemData) {
+    var currentState = remember { MutableTransitionState(CollapsedCartItem.Initial) }
+    currentState.targetState = CollapsedCartItem.Added
+    val transition = updateTransition(currentState)
+
+    val iconScale by transition.animateFloat(
+        label = "iconScale",
+        transitionSpec = {
+            tween(durationMillis = 250, delayMillis = 100, easing = LinearOutSlowInEasing)
+        }
+    ) {
+        if (it == CollapsedCartItem.Added) 1f else 0.2f
+    }
+    val iconAlpha by transition.animateFloat(
+        label = "iconAlpha",
+        transitionSpec = {
+            tween(durationMillis = 150, easing = LinearEasing)
+        }
+    ) {
+        if (it == CollapsedCartItem.Added) 1f else 0f
+    }
+
     Image(
         painter = painterResource(id = data.photoResId),
         contentDescription = data.title,
@@ -178,7 +233,14 @@ private fun CollapsedCartItem(data: ItemData) {
         modifier = Modifier
             .size(40.dp)
             .clip(RoundedCornerShape(10.dp))
+            .scale(iconScale)
+            .alpha(iconAlpha)
     )
+}
+
+private enum class CollapsedCartItem {
+    Initial,
+    Added
 }
 
 @Composable
@@ -188,8 +250,12 @@ fun CheckoutButton(modifier: Modifier = Modifier) {
         modifier = modifier
             .background(
                 Brush.verticalGradient(
-                colors = listOf(Color.White.copy(alpha = 0f), Color.White.copy(alpha = ContentAlpha.medium))
-            ))
+                    colors = listOf(
+                        Color.White.copy(alpha = 0f),
+                        Color.White.copy(alpha = ContentAlpha.medium)
+                    )
+                )
+            )
             .padding(24.dp)
             .navigationBarsPadding()
             .fillMaxWidth(),
@@ -211,11 +277,13 @@ fun CartPreview() {
             Cart(
                 modifier = Modifier.align(Alignment.BottomEnd),
                 expanded = showCart,
+                maxHeight = maxHeight,
                 maxWidth = maxWidth,
-                maxHeight = maxHeight
-            ) {
-                showCart = it
-            }
+                onExpand = {
+                    showCart = it
+                },
+                items = SampleItemsData.subList(fromIndex = 0, toIndex = 3)
+            )
 
             AnimatedVisibility(
                 modifier = Modifier.align(Alignment.BottomCenter),

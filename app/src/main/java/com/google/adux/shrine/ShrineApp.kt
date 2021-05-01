@@ -14,13 +14,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.adux.shrine.ui.theme.ShrineTheme
-import kotlinx.coroutines.delay
 
 @ExperimentalAnimationApi
 @Composable
@@ -35,6 +33,8 @@ fun ShrineApp() {
     ShrineTheme {
         var showMenu by remember { mutableStateOf(false) }
         var showCart by remember { mutableStateOf(false) }
+
+        var cartItems by remember { mutableStateOf(SampleItemsData.subList(fromIndex = 0, toIndex = 2)) }
 
         BoxWithConstraints(
             modifier = Modifier.fillMaxSize()
@@ -64,9 +64,13 @@ fun ShrineApp() {
                     showMenu = it
                 }
             )
-            HomeScreen(modifier = Modifier
-                .statusBarsPadding()
-                .offset(y = screenOffset)
+            HomeScreen(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .offset(y = screenOffset),
+                onAddToCart = {
+                    cartItems += it
+                }
             )
 
             // Scrim for cart transition
@@ -81,10 +85,16 @@ fun ShrineApp() {
 
             Cart(
                 modifier = Modifier.align(Alignment.BottomEnd),
+                items = cartItems,
                 expanded = showCart,
                 hidden = showMenu,
                 maxWidth = maxWidth,
-                maxHeight = maxHeight
+                maxHeight = maxHeight,
+                onRemoveItem = { indexToRemove ->
+                    cartItems = cartItems.filterIndexed { idx, item ->
+                        idx != indexToRemove
+                    }
+                }
             ) {
                 showCart = it
             }

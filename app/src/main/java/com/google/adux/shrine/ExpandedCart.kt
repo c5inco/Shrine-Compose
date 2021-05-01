@@ -24,7 +24,8 @@ import com.google.adux.shrine.ui.theme.ShrineTheme
 @Composable
 fun ExpandedCart(
     items: List<ItemData> = SampleItemsData,
-    onCollapse: () -> Unit
+    onRemoveItem: (Int) -> Unit = {},
+    onCollapse: () -> Unit = {}
 ) {
     Column(
         Modifier
@@ -62,14 +63,16 @@ fun ExpandedCart(
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp),
+                        .padding(start = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.RemoveCircleOutline,
-                        contentDescription = "Remove icon"
-                    )
-                    Spacer(Modifier.width(16.dp))
+                    IconButton(onClick = { onRemoveItem(idx) }) {
+                        Icon(
+                            imageVector = Icons.Default.RemoveCircleOutline,
+                            contentDescription = "Remove icon"
+                        )
+                    }
+                    Spacer(Modifier.width(6.dp))
                     Column(
                         Modifier
                             .fillMaxWidth()

@@ -1,5 +1,6 @@
 package com.google.adux.shrine
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -7,14 +8,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-@Preview(showBackground = true, device = Devices.PIXEL_2, showSystemUi = true)
+@Preview(showBackground = true, device = Devices.PIXEL_2)
 @Composable
 fun PlaygroundPreview() {
     MaterialTheme {
@@ -22,7 +25,8 @@ fun PlaygroundPreview() {
             Modifier.padding(32.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Button(onClick = {}) {
+            var count by remember { mutableStateOf(2) }
+            Button(onClick = { count++ }) {
                 Icon(
                     imageVector = Icons.Default.Face,
                     contentDescription = null
@@ -30,11 +34,41 @@ fun PlaygroundPreview() {
                 Spacer(Modifier.width(8.dp))
                 Text("Default button")
             }
-            CustomButton()
-            CustomButton()
-            CustomButton()
+
+            for (i in 0 until count) {
+                key(i) {
+                    var currentState = remember { MutableTransitionState(SquircleState.Initial) }
+                    currentState.targetState = SquircleState.Added
+                    val transition = updateTransition(currentState)
+
+                    val iconScale by transition.animateFloat(
+                        label = "iconScale",
+                    ) {
+                        if (it == SquircleState.Added) 1f else 0.2f
+                    }
+                    val iconAlpha by transition.animateFloat(
+                        label = "iconAlpha",
+                    ) {
+                        if (it == SquircleState.Added) 1f else 0f
+                    }
+
+                    Icon(
+                        imageVector = Icons.Default.Face,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(64.dp)
+                            .scale(iconScale)
+                            .alpha(iconAlpha)
+                    )
+                }
+            }
         }
     }
+}
+
+private enum class SquircleState {
+    Initial,
+    Added
 }
 
 @Composable
