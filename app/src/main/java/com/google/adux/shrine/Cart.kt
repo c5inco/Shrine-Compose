@@ -135,8 +135,8 @@ fun Cart(
             // Expanded cart
             AnimatedVisibility(
                 visible = expanded,
-                enter = fadeIn(),
-                exit = fadeOut()
+                enter = fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)),
+                exit = fadeOut(animationSpec = tween(durationMillis = 117, easing = LinearEasing))
             ) {
                 ExpandedCart()
             }
