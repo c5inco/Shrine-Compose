@@ -29,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.adux.shrine.ui.theme.ShrineTheme
 
@@ -45,6 +47,7 @@ fun Cart(
         targetState = if (expanded) CartState.Opened else CartState.Closed,
         label = "cartTransition"
     )
+
     val cartXOffset by cartOpenTransition.animateDp(
         label = "cartXOffset",
         transitionSpec = {
@@ -59,8 +62,8 @@ fun Cart(
         if (it == CartState.Opened) 0.dp else (maxWidth.value - (24 + 40 * 3 + 16 * 2 + 16)).dp
     }
 
-    val cartYOffset by cartOpenTransition.animateDp(
-        label = "cartYOffset",
+    val cartHeight by cartOpenTransition.animateDp(
+        label = "cartHeight",
         transitionSpec = {
             when {
                 CartState.Opened isTransitioningTo CartState.Closed ->
@@ -70,7 +73,7 @@ fun Cart(
             }
         }
     ) {
-        if (it == CartState.Opened) 0.dp else (maxHeight.value - 40 - 8 - 8).dp
+        if (it == CartState.Opened) maxHeight else (40 + 8 + 8).dp
     }
 
     val cornerSize by cartOpenTransition.animateDp(
@@ -117,11 +120,9 @@ fun Cart(
 
     Surface(
         modifier
-            .fillMaxSize()
-            .offset(
-                x = cartXOffset,
-                y = cartYOffset
-            )
+            .fillMaxWidth()
+            .offset(x = cartXOffset)
+            .navigationBarsHeight(cartHeight)
             .shadow(8.dp, CutCornerShape(topStart = cornerSize))
             .clip(CutCornerShape(topStart = cornerSize)),
         color = MaterialTheme.colors.secondary
@@ -155,6 +156,7 @@ private fun CollapsedCart(
         Modifier
             .clickable { onClick() }
             .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp)
+            .navigationBarsPadding()
             .alpha(collapsedCartAlpha),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -204,7 +206,7 @@ fun CheckoutButton(modifier: Modifier = Modifier) {
 @ExperimentalAnimationApi
 @Composable
 fun CartPreview() {
-    var showCart by remember { mutableStateOf(true) }
+    var showCart by remember { mutableStateOf(false) }
 
     ShrineTheme {
         BoxWithConstraints(Modifier.fillMaxSize()) {
