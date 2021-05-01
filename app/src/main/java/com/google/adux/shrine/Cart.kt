@@ -120,17 +120,14 @@ fun Cart(
                 y = cartYOffset
             )
             .shadow(8.dp, CutCornerShape(topStart = cornerSize))
-            .clip(CutCornerShape(topStart = cornerSize))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = { onExpand(!expanded) }
-            ),
+            .clip(CutCornerShape(topStart = cornerSize)),
         color = MaterialTheme.colors.secondary
     ) {
         Box {
             // Collapsed cart
-            CollapsedCart(collapsedCartAlpha)
+            CollapsedCart(collapsedCartAlpha) {
+                onExpand(true)
+            }
 
             // Expanded cart
             AnimatedVisibility(
@@ -138,16 +135,22 @@ fun Cart(
                 enter = fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)),
                 exit = fadeOut(animationSpec = tween(durationMillis = 117, easing = LinearEasing))
             ) {
-                ExpandedCart()
+                ExpandedCart {
+                    onExpand(false)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun CollapsedCart(collapsedCartAlpha: Float) {
+private fun CollapsedCart(
+    collapsedCartAlpha: Float,
+    onClick: () -> Unit
+) {
     Row(
         Modifier
+            .clickable { onClick() }
             .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp)
             .alpha(collapsedCartAlpha),
         verticalAlignment = Alignment.CenterVertically,

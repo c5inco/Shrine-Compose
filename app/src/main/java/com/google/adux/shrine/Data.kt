@@ -101,4 +101,28 @@ val SampleItemsData = listOf(
         category = Category.Accessories,
         photoResId = R.drawable.photo_5
     ),
+    ItemData(
+        id = 6,
+        title = "Flow Shirt Blouse",
+        price = 240,
+        vendor = Vendor.Lmbrjk,
+        category = Category.Accessories,
+        photoResId = R.drawable.photo_6
+    ),
+    ItemData(
+        id = 7,
+        title = "Flow Shirt Blouse",
+        price = 240,
+        vendor = Vendor.Lmbrjk,
+        category = Category.Accessories,
+        photoResId = R.drawable.photo_7
+    ),
+    ItemData(
+        id = 8,
+        title = "Flow Shirt Blouse",
+        price = 240,
+        vendor = Vendor.Lmbrjk,
+        category = Category.Accessories,
+        photoResId = R.drawable.photo_8
+    ),
 )

@@ -3,11 +3,11 @@ package com.google.adux.shrine
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.RemoveCircle
 import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,10 +22,14 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.google.adux.shrine.ui.theme.ShrineTheme
 
 @Composable
-fun ExpandedCart(items: List<ItemData> = SampleItemsData) {
+fun ExpandedCart(
+    items: List<ItemData> = SampleItemsData,
+    onCollapse: () -> Unit
+) {
     Column(
         Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
@@ -35,7 +39,7 @@ fun ExpandedCart(items: List<ItemData> = SampleItemsData) {
             Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = {}) {
+            IconButton(onClick = { onCollapse() }) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
                     contentDescription = "Collapse cart icon"
@@ -51,7 +55,8 @@ fun ExpandedCart(items: List<ItemData> = SampleItemsData) {
         }
 
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             items.forEachIndexed { idx, item ->
                 Row(
@@ -106,6 +111,8 @@ fun ExpandedCart(items: List<ItemData> = SampleItemsData) {
                 }
             }
         }
+
+        Spacer(Modifier.height(72.dp))
     }
 }
 
@@ -117,7 +124,7 @@ fun ExpandedCartPreview() {
             Modifier.fillMaxSize(),
             color = MaterialTheme.colors.secondary
         ) {
-            ExpandedCart()
+            ExpandedCart { }
         }
     }
 }
