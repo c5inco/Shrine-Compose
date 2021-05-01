@@ -39,12 +39,13 @@ import com.google.adux.shrine.ui.theme.ShrineTheme
 fun Cart(
     modifier: Modifier = Modifier,
     expanded: Boolean = false,
+    hidden: Boolean = false,
     maxHeight: Dp,
     maxWidth: Dp,
     onExpand: (Boolean) -> Unit = {}
 ) {
     val cartOpenTransition = updateTransition(
-        targetState = if (expanded) CartState.Opened else CartState.Closed,
+        targetState = if (hidden) CartState.Hidden else if (expanded) CartState.Opened else CartState.Closed,
         label = "cartTransition"
     )
 
@@ -52,6 +53,10 @@ fun Cart(
         label = "cartXOffset",
         transitionSpec = {
             when {
+                CartState.Closed isTransitioningTo CartState.Hidden ->
+                    tween(durationMillis = 450)
+                CartState.Hidden isTransitioningTo CartState.Closed ->
+                    tween(durationMillis = 450)
                 CartState.Opened isTransitioningTo CartState.Closed ->
                     tween(durationMillis = 433, delayMillis = 67)
                 else ->
@@ -59,7 +64,14 @@ fun Cart(
             }
         }
     ) {
-        if (it == CartState.Opened) 0.dp else (maxWidth.value - (24 + 40 * 3 + 16 * 2 + 16)).dp
+        if (it == CartState.Hidden) {
+            maxWidth
+        }
+        else if (it == CartState.Opened) {
+            0.dp
+        } else {
+            (maxWidth.value - (24 + 40 * 3 + 16 * 2 + 16)).dp
+        }
     }
 
     val cartHeight by cartOpenTransition.animateDp(
@@ -220,4 +232,5 @@ fun CartPreview() {
 enum class CartState {
     Closed,
     Opened,
+    Hidden
 }

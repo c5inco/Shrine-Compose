@@ -48,9 +48,9 @@ fun ShrineApp() {
                 transitionSpec = {
                     when {
                         ScreenState.Expanded isTransitioningTo ScreenState.Collapsed ->
-                            tween(durationMillis = 300)
+                            tween(durationMillis = 450)
                         else ->
-                            spring()
+                            tween(durationMillis = 350)
                     }
                 }
             ) {
@@ -74,6 +74,7 @@ fun ShrineApp() {
             Cart(
                 modifier = Modifier.align(Alignment.BottomEnd),
                 expanded = showCart,
+                hidden = showMenu,
                 maxWidth = maxWidth,
                 maxHeight = maxHeight
             ) {
@@ -130,7 +131,7 @@ fun ShrineApp() {
     }
 }
 
-@Preview(device = Devices.PIXEL_4, showSystemUi = true)
+@Preview(device = Devices.PIXEL_4)
 @ExperimentalAnimationApi
 @Composable
 fun ShrineAppPreview() {

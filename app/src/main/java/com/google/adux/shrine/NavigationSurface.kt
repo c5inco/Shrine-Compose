@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.adux.shrine.ui.theme.ShrineTheme
+import kotlinx.coroutines.delay
 
 private enum class Visibility {
     VISIBLE,
@@ -49,7 +50,6 @@ fun NavigationSurface(
         Column {
             InsetAwareTopAppBar(
                 title = {
-                    val duration = 500
                     Box(
                         Modifier
                             .width(56.dp)
@@ -72,9 +72,9 @@ fun NavigationSurface(
                             transitionSpec = {
                                 when {
                                     Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
-                                        tween(durationMillis = 300, easing = LinearEasing)
+                                        tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)
                                     else ->
-                                        tween(durationMillis = 300)
+                                        tween(durationMillis = 120, easing = LinearEasing)
                                 }
                             }
                         ) {
@@ -83,7 +83,12 @@ fun NavigationSurface(
                         val menuIconAlpha by menuIconTransition.animateFloat(
                             label = "menuIconAlpha",
                             transitionSpec = {
-                                tween(durationMillis = 300)
+                                when {
+                                    Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
+                                        tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)
+                                    else ->
+                                        tween(durationMillis = 120, easing = LinearEasing)
+                                }
                             }
                         ) {
                             if (it == Visibility.VISIBLE) 0f else 1f
@@ -118,9 +123,9 @@ fun NavigationSurface(
                             transitionSpec = {
                                 when {
                                     Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
-                                        tween(durationMillis = 300, easing = LinearEasing)
+                                        tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)
                                     else ->
-                                        tween(durationMillis = 300)
+                                        tween(durationMillis = 120, easing = LinearEasing)
                                 }
                             }
                         ) {
@@ -129,7 +134,12 @@ fun NavigationSurface(
                         val menuNameAlpha by menuNameTransition.animateFloat(
                             label = "menuNameAlpha",
                             transitionSpec = {
-                                tween(durationMillis = 300)
+                                when {
+                                    Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
+                                        tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)
+                                    else ->
+                                        tween(durationMillis = 120, easing = LinearEasing)
+                                }
                             }
                         ) {
                             if (it == Visibility.GONE) 0f else 1f
@@ -152,9 +162,9 @@ fun NavigationSurface(
                             transitionSpec = {
                                 when {
                                     Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
-                                        tween(durationMillis = 500)
+                                        tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)
                                     else ->
-                                        tween(durationMillis = 300)
+                                        tween(durationMillis = 120, easing = LinearEasing)
                                 }
                             }
                         ) {
@@ -163,7 +173,12 @@ fun NavigationSurface(
                         val shrineNameAlpha by shrineNameTransition.animateFloat(
                             label = "shrineNameAlpha",
                             transitionSpec = {
-                                tween(durationMillis = 300)
+                                when {
+                                    Visibility.GONE isTransitioningTo Visibility.VISIBLE ->
+                                        tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)
+                                    else ->
+                                        tween(durationMillis = 120, easing = LinearEasing)
+                                }
                             }
                         ) {
                             if (it == Visibility.GONE) 0f else 1f
