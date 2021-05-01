@@ -16,11 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.adux.shrine.ui.theme.ShrineTheme
-import kotlinx.coroutines.delay
 
 private enum class Visibility {
     VISIBLE,
@@ -147,7 +146,8 @@ fun NavigationSurface(
 
                         Text(
                             "Menu".toUpperCase(),
-                            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Normal),
+                            style = MaterialTheme.typography.subtitle1,
+                            fontSize = 17.sp,
                             modifier = Modifier
                                 .offset(x = menuNameOffset)
                                 .alpha(menuNameAlpha)
@@ -186,7 +186,8 @@ fun NavigationSurface(
 
                         Text(
                             "Shrine".toUpperCase(),
-                            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Normal),
+                            style = MaterialTheme.typography.subtitle1,
+                            fontSize = 17.sp,
                             modifier = Modifier
                                 .offset(x = shrineNameOffset)
                                 .alpha(shrineNameAlpha)
