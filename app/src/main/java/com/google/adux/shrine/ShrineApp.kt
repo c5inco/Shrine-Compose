@@ -2,9 +2,9 @@ package com.google.adux.shrine
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -57,7 +57,6 @@ fun ShrineApp() {
                 val navBarHeight = LocalWindowInsets.current.navigationBars.bottom
                 if (it == ScreenState.Collapsed) (maxHeight.value - 56 - navBarHeight).dp else (56).dp
             }
-            val screenAlpha by animateFloatAsState(targetValue = if (showCart) 0f else 1f)
 
             NavigationSurface(
                 inForeground = showMenu,
@@ -68,8 +67,17 @@ fun ShrineApp() {
             HomeScreen(modifier = Modifier
                 .statusBarsPadding()
                 .offset(y = screenOffset)
-                .alpha(screenAlpha)
             )
+
+            // Scrim for cart transition
+            AnimatedVisibility(
+                modifier = Modifier.fillMaxSize(),
+                visible = showCart,
+                enter = fadeIn(animationSpec = tween(durationMillis = 500, easing = LinearEasing)),
+                exit = fadeOut(animationSpec = tween(durationMillis = 500, easing = LinearEasing))
+            ) {
+                Box(Modifier.background(Color.White.copy(alpha = ContentAlpha.medium)))
+            }
 
             Cart(
                 modifier = Modifier.align(Alignment.BottomEnd),
@@ -119,6 +127,7 @@ fun ShrineApp() {
                     .alpha(checkoutButtonAlpha)
             )
 
+            // TODO: Ask question about actual scaleEffect, not expand for AnimatedVisibility
             // AnimatedVisibility(
             //     modifier = Modifier.align(Alignment.BottomCenter),
             //     visible = showCart,
