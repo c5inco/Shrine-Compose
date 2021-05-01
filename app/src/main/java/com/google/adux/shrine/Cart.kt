@@ -104,20 +104,6 @@ fun Cart(
         if (it == CartState.Opened) 0f else 1f
     }
 
-    val checkoutButtonScale by cartOpenTransition.animateFloat(
-        label = "checkoutButtonScale",
-        transitionSpec = {
-            when {
-                CartState.Opened isTransitioningTo CartState.Closed ->
-                    tween(durationMillis = 117, delayMillis = 117, easing = LinearEasing)
-                else ->
-                    tween(durationMillis = 150, easing = LinearEasing)
-            }
-        }
-    ) {
-        if (it == CartState.Opened) 1f else 0.8f
-    }
-
     Surface(
         modifier
             .fillMaxWidth()
