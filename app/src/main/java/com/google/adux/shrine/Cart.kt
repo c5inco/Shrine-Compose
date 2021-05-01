@@ -1,8 +1,11 @@
 package com.google.adux.shrine
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -16,20 +19,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.adux.shrine.ui.theme.ShrineTheme
 
+@ExperimentalAnimationApi
 @Composable
 fun Cart(
     modifier: Modifier = Modifier,
@@ -130,30 +130,41 @@ fun Cart(
     ) {
         Box {
             // Collapsed cart
-            Row(
-                Modifier
-                    .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp)
-                    .alpha(collapsedCartAlpha),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ShoppingCart,
-                    contentDescription = "Shopping cart icon",
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-                CartItem(data = SampleItemsData[0])
-                CartItem(data = SampleItemsData[1])
-            }
+            CollapsedCart(collapsedCartAlpha)
 
             // Expanded cart
-
+            AnimatedVisibility(
+                visible = expanded,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                ExpandedCart()
+            }
         }
     }
 }
 
 @Composable
-fun CartItem(data: ItemData) {
+private fun CollapsedCart(collapsedCartAlpha: Float) {
+    Row(
+        Modifier
+            .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp)
+            .alpha(collapsedCartAlpha),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.ShoppingCart,
+            contentDescription = "Shopping cart icon",
+            modifier = Modifier.padding(horizontal = 8.dp)
+        )
+        CollapsedCartItem(data = SampleItemsData[0])
+        CollapsedCartItem(data = SampleItemsData[1])
+    }
+}
+
+@Composable
+private fun CollapsedCartItem(data: ItemData) {
     Image(
         painter = painterResource(id = data.photoResId),
         contentDescription = data.title,
@@ -178,7 +189,9 @@ fun CheckoutButton(modifier: Modifier = Modifier) {
     }
 }
 
+
 @Preview(showBackground = true, device = Devices.PIXEL_4)
+@ExperimentalAnimationApi
 @Composable
 fun CartPreview() {
     var showCart by remember { mutableStateOf(true) }
@@ -193,10 +206,15 @@ fun CartPreview() {
             ) {
                 showCart = it
             }
-            CheckoutButton(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-            )
+
+            AnimatedVisibility(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                visible = showCart,
+                enter = fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)),
+                exit = fadeOut(animationSpec = tween(durationMillis = 117, easing = LinearEasing))
+            ) {
+                CheckoutButton()
+            }
         }
     }
 }

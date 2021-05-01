@@ -11,7 +11,7 @@ data class ItemData(
 
 enum class Vendor {
     Alphi,
-    Lmb,
+    Lmbrjk,
     Mal,
     Six,
     Squiggle,
@@ -37,7 +37,7 @@ fun getVendorResId(vendor: Vendor): Int {
         Vendor.Alphi -> {
             return R.drawable.ic_alphi_logo
         }
-        Vendor.Lmb -> {
+        Vendor.Lmbrjk -> {
             return R.drawable.ic_lmb_logo
         }
         Vendor.Mal -> {
@@ -97,7 +97,7 @@ val SampleItemsData = listOf(
         id = 5,
         title = "Flow Shirt Blouse",
         price = 240,
-        vendor = Vendor.Lmb,
+        vendor = Vendor.Lmbrjk,
         category = Category.Accessories,
         photoResId = R.drawable.photo_5
     ),
