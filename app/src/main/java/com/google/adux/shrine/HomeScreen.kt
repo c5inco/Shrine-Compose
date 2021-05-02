@@ -21,6 +21,7 @@ import com.google.adux.shrine.ui.theme.ShrineTheme
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    items: List<ItemData> = SampleItemsData,
     onAddToCart: (ItemData) -> Unit = {}
 ) {
     Surface(
@@ -49,71 +50,49 @@ fun HomeScreen(
                     Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.spacedBy(gridGutter)
                 ) {
-                    Column(
-                        Modifier
-                            .fillMaxHeight()
-                            .width(this@BoxWithConstraints.minWidth * 0.66f),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        HomeCard(
-                            data = SampleItemsData[0],
-                            modifier = Modifier
-                                .align(Alignment.End)
-                                .fillMaxWidth(0.8f)
-                        )
-                        Spacer(Modifier.height(40.dp))
-                        HomeCard(
-                            data = SampleItemsData[1],
-                            modifier = Modifier
-                                .fillMaxWidth(0.8f)
-                        )
-                    }
-                    Column(
-                        Modifier
-                            .fillMaxHeight()
-                            .width(this@BoxWithConstraints.minWidth * 0.66f - gridGutter),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        HomeCard(
-                            data = SampleItemsData[3],
-                            modifier = Modifier.fillMaxWidth(0.66f),
-                            onClick = {
-                                onAddToCart(it)
+                    var idx = 0
+                    while (idx < items.size) {
+                        val even = idx % 3 == 0
+                        if (even) {
+                            Column(
+                                Modifier
+                                    .fillMaxHeight()
+                                    .width(this@BoxWithConstraints.minWidth * 0.66f),
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                HomeCard(
+                                    data = items[idx],
+                                    modifier = Modifier
+                                        .align(Alignment.End)
+                                        .fillMaxWidth(0.8f)
+                                )
+                                if (items.getOrNull(idx +1) != null) {
+                                    Spacer(Modifier.height(40.dp))
+                                    HomeCard(
+                                        data = items[idx + 1],
+                                        modifier = Modifier
+                                            .fillMaxWidth(0.8f)
+                                    )
+                                }
                             }
-                        )
-                    }
-                    Column(
-                        Modifier
-                            .fillMaxHeight()
-                            .width(this@BoxWithConstraints.minWidth * 0.66f),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        HomeCard(
-                            data = SampleItemsData[2],
-                            modifier = Modifier
-                                .align(Alignment.Start)
-                                .fillMaxWidth(0.8f)
-                        )
-                        Spacer(Modifier.height(40.dp))
-                        HomeCard(
-                            data = SampleItemsData[4],
-                            modifier = Modifier
-                                .align(Alignment.End)
-                                .fillMaxWidth(0.8f)
-                        )
-                    }
-                    Column(
-                        Modifier
-                            .fillMaxHeight()
-                            .width(this@BoxWithConstraints.minWidth * 0.66f - gridGutter),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        HomeCard(
-                            data = SampleItemsData[5],
-                            modifier = Modifier.fillMaxWidth(0.66f)
-                        )
+                        } else {
+                            Column(
+                                Modifier
+                                    .fillMaxHeight()
+                                    .width(this@BoxWithConstraints.minWidth * 0.66f - gridGutter),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                HomeCard(
+                                    data = items[idx],
+                                    modifier = Modifier.fillMaxWidth(0.66f),
+                                    onClick = {
+                                        onAddToCart(it)
+                                    }
+                                )
+                            }
+                        }
+                        idx += if (even) 2 else 1
                     }
                 }
             }
