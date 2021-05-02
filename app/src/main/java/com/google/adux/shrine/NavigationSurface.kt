@@ -38,9 +38,9 @@ enum class Screens {
 @Composable
 fun NavigationSurface(
     inForeground: Boolean = false,
-    activeScreen: Screens = Screens.Accessories,
+    activeCategory: Category = Category.All,
     onToggle: (Boolean) -> Unit = {},
-    onNavigate: (Screens) -> Unit = {}
+    onNavigate: (Category) -> Unit = {}
 ) {
     Surface(
         Modifier.fillMaxSize(),
@@ -213,24 +213,35 @@ fun NavigationSurface(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Spacer(Modifier.height(20.dp))
-                    NavItem(Screens.All, Screens.All == activeScreen) {
+                    NavItem(Category.All, Category.All == activeCategory) {
                         onNavigate(it)
                     }
-                    NavItem(Screens.Accessories, Screens.Accessories == activeScreen) {
+                    NavItem(Category.Accessories, Category.Accessories == activeCategory) {
                         onNavigate(it)
                     }
-                    NavItem(Screens.Clothing, Screens.Clothing == activeScreen) {
+                    NavItem(Category.Clothing, Category.Clothing == activeCategory) {
                         onNavigate(it)
                     }
-                    NavItem(Screens.Home, Screens.Home == activeScreen) {
+                    NavItem(Category.Home, Category.Home == activeCategory) {
                         onNavigate(it)
                     }
                     Divider(
                         Modifier.width(56.dp),
                         color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
                     )
-                    NavItem(Screens.Logout, Screens.Logout == activeScreen) {
-                        onNavigate(it)
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .clip(MaterialTheme.shapes.medium)
+                            .clickable { }
+                            .fillMaxWidth(0.5f)
+                            .height(44.dp)
+                    ) {
+                        Text(
+                            "Logout".toUpperCase(),
+                            style = MaterialTheme.typography.subtitle1,
+                            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+                        )
                     }
                 }
             }
@@ -240,15 +251,15 @@ fun NavigationSurface(
 
 @Composable
 fun NavItem(
-    screen: Screens,
+    category: Category,
     active: Boolean = false,
-    onClick: (Screens) -> Unit
+    onClick: (Category) -> Unit
 ) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
-            .clickable { onClick(screen) }
+            .clickable { onClick(category) }
             .fillMaxWidth(0.5f)
             .height(44.dp)
     ) {
@@ -259,7 +270,7 @@ fun NavItem(
             )
         }
         Text(
-            "$screen".toUpperCase(),
+            "$category".toUpperCase(),
             style = MaterialTheme.typography.subtitle1,
             color = LocalContentColor.current.copy(alpha = if (active) ContentAlpha.high else ContentAlpha.medium),
         )
@@ -272,10 +283,10 @@ fun NavItem(
 fun NavigationSurfacePreview() {
     ShrineTheme {
         var toggle by remember { mutableStateOf(true) }
-        var activeScreen by remember { mutableStateOf(Screens.Home) }
+        var activeScreen by remember { mutableStateOf(Category.Home) }
         NavigationSurface(
             inForeground = toggle,
-            activeScreen = activeScreen,
+            activeCategory = activeScreen,
             onToggle = {
                 toggle = it
             },
@@ -292,10 +303,10 @@ fun NavigationSurfacePreview() {
 fun NavigationSurfaceDarkPreview() {
     ShrineTheme(darkTheme = true) {
         var toggle by remember { mutableStateOf(true) }
-        var activeScreen by remember { mutableStateOf(Screens.Home) }
+        var activeScreen by remember { mutableStateOf(Category.All) }
         NavigationSurface(
             inForeground = toggle,
-            activeScreen = activeScreen,
+            activeCategory = activeScreen,
             onToggle = {
                 toggle = it
             },

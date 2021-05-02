@@ -20,6 +20,7 @@ enum class Vendor {
 }
 
 enum class Category {
+    All,
     Accessories,
     Clothing,
     Home

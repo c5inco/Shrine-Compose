@@ -34,6 +34,9 @@ fun ShrineApp() {
     }
 
     ShrineTheme {
+        var activeCategory by remember { mutableStateOf(Category.All) }
+        var inventory by remember { mutableStateOf(SampleItemsData.toList()) }
+
         var showMenu by remember { mutableStateOf(false) }
         var showCart by remember { mutableStateOf(false) }
 
@@ -63,8 +66,21 @@ fun ShrineApp() {
 
             NavigationSurface(
                 inForeground = showMenu,
+                activeCategory = activeCategory,
                 onToggle = {
                     showMenu = it
+                },
+                onNavigate = {
+                    activeCategory = it
+
+                    inventory = if (it == Category.All) {
+                        SampleItemsData.toList()
+                    } else {
+                        SampleItemsData.filter { item ->
+                            item.category == activeCategory
+                        }
+                    }
+                    showMenu = false
                 }
             )
             HomeScreen(
@@ -72,6 +88,7 @@ fun ShrineApp() {
                     .height((maxHeight.value - TOP_APPBAR_HEIGHT).dp)
                     .statusBarsPadding()
                     .offset(y = screenOffset),
+                items = inventory,
                 onAddToCart = {
                     cartItems += it
                 }
