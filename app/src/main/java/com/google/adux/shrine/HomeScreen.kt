@@ -55,14 +55,14 @@ fun HomeScreen(
                                     data = items[idx],
                                     modifier = Modifier
                                         .align(Alignment.End)
-                                        .fillMaxWidth(0.8f),
+                                        .fillMaxWidth(0.85f),
                                     onClick = { onAddToCart(it) }
                                 )
                                 if (items.getOrNull(idx +1) != null) {
-                                    Spacer(Modifier.height(40.dp))
+                                    Spacer(Modifier.height(32.dp))
                                     HomeCard(
                                         data = items[idx + 1],
-                                        modifier = Modifier.fillMaxWidth(0.8f),
+                                        modifier = Modifier.fillMaxWidth(0.85f),
                                         onClick = { onAddToCart(it) }
                                     )
                                 }
@@ -118,8 +118,9 @@ fun HomeCard(
             Image(
                 painter = painterResource(id = data.photoResId),
                 contentDescription = "Image description of photo",
+                alignment = Alignment.TopCenter,
                 contentScale = if (vertical) ContentScale.FillHeight else ContentScale.FillWidth,
-                modifier = if (vertical) Modifier.fillMaxHeight(0.4f) else Modifier.fillMaxWidth()
+                modifier = if (vertical) Modifier.fillMaxHeight(0.4f) else Modifier.fillMaxWidth().heightIn(max = 220.dp)
             )
             Icon(
                 imageVector = Icons.Outlined.AddShoppingCart,
@@ -136,7 +137,7 @@ fun HomeCard(
                     .offset(y = 12.dp)
             )
         }
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(20.dp))
         Text("${data.title}", style = MaterialTheme.typography.subtitle2)
         Spacer(Modifier.height(8.dp))
         Text("\$${data.price}", style = MaterialTheme.typography.body2)
