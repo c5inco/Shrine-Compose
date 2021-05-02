@@ -13,9 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.adux.shrine.ui.theme.ShrineTheme
@@ -54,6 +56,7 @@ fun ExpandedCart(
             Text("${if (size == 0) "No" else size} item${if (size != 1) "s" else ""}".toUpperCase())
         }
 
+        // Items
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -100,7 +103,7 @@ fun ExpandedCart(
                                         style = MaterialTheme.typography.body2,
                                     )
                                     Text(
-                                        text = "$${item.price}",
+                                        text = "${formatDollar(item.price, 0)}",
                                         style = MaterialTheme.typography.body2,
                                     )
                                 }
@@ -115,19 +118,96 @@ fun ExpandedCart(
             }
         }
 
-        Spacer(Modifier.height(72.dp))
+        // Total
+        val subtotal = items.sumBy { it.price }
+        val shipping = if (items.isNotEmpty()) 10 else 0
+        val tax = 0.1f
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 56.dp)
+        ) {
+            Divider(color = MaterialTheme.colors.onSecondary.copy(alpha = 0.3f))
+            Spacer(Modifier.height(24.dp))
+            ConstraintLayout(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp),
+            ) {
+                val (totalText, totalValue) = createRefs()
+
+                Text(
+                    "Total".toUpperCase(),
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.constrainAs(totalText) {
+                        start.linkTo(parent.start)
+                    }
+                )
+                Text(
+                    "${formatDollar(subtotal * (1 + tax) + shipping)}",
+                    style = MaterialTheme.typography.h5,
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.constrainAs(totalValue) {
+                        end.linkTo(parent.end)
+                        baseline.linkTo(totalText.baseline)
+                    }
+                )
+            }
+            Spacer(Modifier.height(12.dp))
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text("Subtotal", style = MaterialTheme.typography.body2)
+                    Text("Shipping", style = MaterialTheme.typography.body2)
+                    Text("Tax", style = MaterialTheme.typography.body2)
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Text("${formatDollar(subtotal)}", style = MaterialTheme.typography.body2)
+                    Text("${formatDollar(shipping)}", style = MaterialTheme.typography.body2)
+                    Text("${formatDollar(subtotal * tax)}", style = MaterialTheme.typography.body2)
+                }
+            }
+            Spacer(Modifier.height(24.dp))
+        }
+        Divider(color = MaterialTheme.colors.onSecondary.copy(alpha = 0.3f))
+
+        Spacer(Modifier.height(96.dp))
     }
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Composable
-fun ExpandedCartPreview() {
+fun LongCartPreview() {
     ShrineTheme {
         Surface(
             Modifier.fillMaxSize(),
             color = MaterialTheme.colors.secondary
         ) {
-            ExpandedCart { }
+            ExpandedCart()
+        }
+    }
+}
+
+@Preview(showBackground = true, device = Devices.PIXEL_4)
+@Composable
+fun ShortCardPreview() {
+    ShrineTheme {
+        Surface(
+            Modifier.fillMaxSize(),
+            color = MaterialTheme.colors.secondary
+        ) {
+            ExpandedCart(items = SampleItemsData.subList(fromIndex = 0, toIndex = 3))
         }
     }
 }

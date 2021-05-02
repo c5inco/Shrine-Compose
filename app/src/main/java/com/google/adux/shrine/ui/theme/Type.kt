@@ -17,6 +17,12 @@ private val Rubik = FontFamily(
 
 // Set of Material typography styles to start with
 val Typography = Typography(
+    h5 = TextStyle(
+        fontFamily = Rubik,
+        fontWeight = FontWeight.Medium,
+        fontSize = 24.sp,
+        letterSpacing = 0.15.sp
+    ),
     h6 = TextStyle(
         fontFamily = Rubik,
         fontWeight = FontWeight.Medium,

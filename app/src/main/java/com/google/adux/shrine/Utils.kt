@@ -1,5 +1,7 @@
 package com.google.adux.shrine
 
+import android.icu.text.NumberFormat
+import android.icu.util.Currency
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -9,6 +11,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
+
+fun formatDollar(value: Any, decimalPlaces: Int = 2): String {
+    val format: NumberFormat = NumberFormat.getCurrencyInstance()
+    format.maximumFractionDigits = decimalPlaces
+    format.currency = Currency.getInstance("USD")
+
+    return format.format(value)
+}
 
 /**
  * A wrapper around [TopAppBar] which uses [Modifier.statusBarsPadding] to shift the app bar's
