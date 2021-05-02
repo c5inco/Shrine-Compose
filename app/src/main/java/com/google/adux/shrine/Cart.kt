@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.adux.shrine.ui.theme.ShrineTheme
-import kotlin.math.max
 import kotlin.math.min
 
 @ExperimentalAnimationApi
@@ -229,7 +228,8 @@ private fun CollapsedCartItem(data: ItemData) {
     Image(
         painter = painterResource(id = data.photoResId),
         contentDescription = data.title,
-        contentScale = ContentScale.FillHeight,
+        alignment = Alignment.TopCenter,
+        contentScale = if (data.photoOrientation == PhotoOrientation.Portrait) ContentScale.FillWidth else ContentScale.FillHeight,
         modifier = Modifier
             .size(40.dp)
             .clip(RoundedCornerShape(10.dp))

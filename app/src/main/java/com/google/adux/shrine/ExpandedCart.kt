@@ -2,7 +2,6 @@ package com.google.adux.shrine
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -52,7 +51,7 @@ fun ExpandedCart(
                 style = MaterialTheme.typography.subtitle1
             )
             Spacer(Modifier.width(12.dp))
-            Text("$size item${if (size != 1) "s" else ""}".toUpperCase())
+            Text("${if (size == 0) "No" else size} item${if (size != 1) "s" else ""}".toUpperCase())
         }
 
         Column(
@@ -84,7 +83,8 @@ fun ExpandedCart(
                             Image(
                                 painter = painterResource(id = item.photoResId),
                                 contentDescription = item.title,
-                                contentScale = ContentScale.FillHeight,
+                                alignment = Alignment.TopCenter,
+                                contentScale = if (item.photoOrientation == PhotoOrientation.Portrait) ContentScale.FillWidth else ContentScale.FillHeight,
                                 modifier = Modifier.size(80.dp)
                             )
                             Spacer(Modifier.width(20.dp))
@@ -96,7 +96,7 @@ fun ExpandedCart(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
-                                        text = "${item.vendor}",
+                                        text = "${item.vendor}".toUpperCase(),
                                         style = MaterialTheme.typography.body2,
                                     )
                                     Text(
