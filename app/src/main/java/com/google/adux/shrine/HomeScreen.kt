@@ -30,15 +30,6 @@ fun HomeScreen(
         elevation = 16.dp
     ) {
         Box(Modifier.fillMaxSize()) {
-            IconButton(
-                modifier = Modifier.align(Alignment.TopEnd),
-                onClick = {}
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Tune,
-                    contentDescription = "Filter icon"
-                )
-            }
             BoxWithConstraints(
                 Modifier
                     .fillMaxSize()
@@ -97,6 +88,16 @@ fun HomeScreen(
 
                     Spacer(Modifier.width(gridGutter))
                 }
+            }
+
+            IconButton(
+                modifier = Modifier.align(Alignment.TopEnd),
+                onClick = {}
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Tune,
+                    contentDescription = "Filter icon"
+                )
             }
         }
     }
