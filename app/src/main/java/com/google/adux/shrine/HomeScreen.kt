@@ -64,14 +64,15 @@ fun HomeScreen(
                                     data = items[idx],
                                     modifier = Modifier
                                         .align(Alignment.End)
-                                        .fillMaxWidth(0.8f)
+                                        .fillMaxWidth(0.8f),
+                                    onClick = { onAddToCart(it) }
                                 )
                                 if (items.getOrNull(idx +1) != null) {
                                     Spacer(Modifier.height(40.dp))
                                     HomeCard(
                                         data = items[idx + 1],
-                                        modifier = Modifier
-                                            .fillMaxWidth(0.8f)
+                                        modifier = Modifier.fillMaxWidth(0.8f),
+                                        onClick = { onAddToCart(it) }
                                     )
                                 }
                             }
@@ -79,21 +80,22 @@ fun HomeScreen(
                             Column(
                                 Modifier
                                     .fillMaxHeight()
-                                    .width(this@BoxWithConstraints.minWidth * 0.66f - gridGutter),
+                                    .width(this@BoxWithConstraints.minWidth * 0.66f),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Center
                             ) {
                                 HomeCard(
                                     data = items[idx],
-                                    modifier = Modifier.fillMaxWidth(0.66f),
-                                    onClick = {
-                                        onAddToCart(it)
-                                    }
+                                    vertical = true,
+                                    modifier = Modifier.fillMaxWidth(0.8f),
+                                    onClick = { onAddToCart(it) }
                                 )
                             }
                         }
                         idx += if (even) 2 else 1
                     }
+
+                    Spacer(Modifier.width(gridGutter))
                 }
             }
         }
@@ -103,6 +105,7 @@ fun HomeScreen(
 @Composable
 fun HomeCard(
     data: ItemData,
+    vertical: Boolean = false,
     modifier: Modifier = Modifier,
     onClick: (ItemData) -> Unit = {}
 ) {
@@ -114,8 +117,8 @@ fun HomeCard(
             Image(
                 painter = painterResource(id = data.photoResId),
                 contentDescription = "Image description of photo",
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth()
+                contentScale = if (vertical) ContentScale.FillHeight else ContentScale.FillWidth,
+                modifier = if (vertical) Modifier.fillMaxHeight(0.4f) else Modifier.fillMaxWidth()
             )
             Icon(
                 imageVector = Icons.Outlined.AddShoppingCart,
