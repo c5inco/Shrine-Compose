@@ -94,7 +94,10 @@ fun HomeScreen(
             }
 
             IconButton(
-                modifier = Modifier.align(Alignment.TopEnd),
+                modifier =
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(end = 4.dp),
                 onClick = {}
             ) {
                 Icon(
