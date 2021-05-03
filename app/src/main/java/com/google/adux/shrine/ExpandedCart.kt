@@ -1,5 +1,6 @@
 package com.google.adux.shrine
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -60,6 +61,7 @@ fun ExpandedCart(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .animateContentSize()
         ) {
             items.forEachIndexed { idx, item ->
                 Row(

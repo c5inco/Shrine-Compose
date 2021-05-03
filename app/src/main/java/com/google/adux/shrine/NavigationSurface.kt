@@ -1,7 +1,10 @@
 package com.google.adux.shrine
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -206,45 +209,45 @@ fun NavigationSurface(
                 elevation = 0.dp
             )
 
-            if (inForeground) {
                 Column(
                     Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Spacer(Modifier.height(20.dp))
-                    NavItem(Category.All, Category.All == activeCategory) {
-                        onNavigate(it)
+
+                    Category.values().forEachIndexed { idx, category ->
+                        AnimateListItem(visible = inForeground, idx = idx) {
+                            NavItem(category, category == activeCategory) {
+                                onNavigate(it)
+                            }
+                        }
                     }
-                    NavItem(Category.Accessories, Category.Accessories == activeCategory) {
-                        onNavigate(it)
-                    }
-                    NavItem(Category.Clothing, Category.Clothing == activeCategory) {
-                        onNavigate(it)
-                    }
-                    NavItem(Category.Home, Category.Home == activeCategory) {
-                        onNavigate(it)
-                    }
-                    Divider(
-                        Modifier.width(56.dp),
-                        color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
-                    )
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .clip(MaterialTheme.shapes.medium)
-                            .clickable { }
-                            .fillMaxWidth(0.5f)
-                            .height(44.dp)
-                    ) {
-                        Text(
-                            "Logout".toUpperCase(),
-                            style = MaterialTheme.typography.subtitle1,
-                            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+                    val jdx = Category.values().size
+
+                    AnimateListItem(visible = inForeground, idx = jdx) {
+                        Divider(
+                            Modifier.width(56.dp),
+                            color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
                         )
                     }
+                    AnimateListItem(visible = inForeground, idx = jdx + 1) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .clip(MaterialTheme.shapes.medium)
+                                .clickable { }
+                                .fillMaxWidth(0.5f)
+                                .height(44.dp)
+                        ) {
+                            Text(
+                                "Logout".toUpperCase(),
+                                style = MaterialTheme.typography.subtitle1,
+                                color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+                            )
+                        }
+                    }
                 }
-            }
         }
     }
 }
@@ -274,6 +277,28 @@ fun NavItem(
             style = MaterialTheme.typography.subtitle1,
             color = LocalContentColor.current.copy(alpha = if (active) ContentAlpha.high else ContentAlpha.medium),
         )
+    }
+}
+
+@ExperimentalAnimationApi
+@Composable
+fun AnimateListItem(visible: Boolean, idx: Int, content: @Composable () -> Unit) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(animationSpec =
+            tween(
+                durationMillis = 240,
+                delayMillis = idx * 15 + 60,
+                easing = LinearEasing)
+        ),
+        exit = fadeOut(animationSpec =
+            tween(
+                durationMillis = 90,
+                easing = LinearEasing
+            )
+        )
+    ) {
+        content()
     }
 }
 
