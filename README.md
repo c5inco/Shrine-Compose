@@ -10,3 +10,5 @@ Progress:
 - [x] Inventory
 - [x] Cart
 - [ ] Details
+
+https://user-images.githubusercontent.com/1253402/116843022-7667fa00-ab93-11eb-8f62-7bb147577f83.mov
