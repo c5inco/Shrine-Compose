@@ -11,4 +11,4 @@ Progress:
 - [x] Cart
 - [ ] Details
 
-![shrine-progress](https://user-images.githubusercontent.com/1253402/116843122-d2328300-ab93-11eb-843f-87f53647cae9.gif)
+![shrine-progress](https://user-images.githubusercontent.com/1253402/116843260-3ead8200-ab94-11eb-8bba-052916c62a10.gif)
