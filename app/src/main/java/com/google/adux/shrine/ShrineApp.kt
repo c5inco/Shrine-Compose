@@ -1,5 +1,6 @@
 package com.google.adux.shrine
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
@@ -175,6 +176,13 @@ fun ShrineApp() {
 @ExperimentalAnimationApi
 @Composable
 fun ShrineAppPreview() {
+    ShrineApp()
+}
+
+@Preview(widthDp = 360, heightDp = 640, uiMode = UI_MODE_NIGHT_YES)
+@ExperimentalAnimationApi
+@Composable
+fun ShrineAppDarkPreview() {
     ShrineApp()
 }
 

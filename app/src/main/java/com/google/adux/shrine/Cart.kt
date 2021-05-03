@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -128,9 +129,15 @@ fun Cart(
             .navigationBarsHeight(cartHeight)
             .shadow(8.dp, CutCornerShape(topStart = cornerSize))
             .clip(CutCornerShape(topStart = cornerSize)),
-        color = MaterialTheme.colors.secondary
+        elevation = if (isSystemInDarkTheme()) 24.dp else 0.dp
     ) {
-        Box {
+        Box(
+            modifier = if (isSystemInDarkTheme()) {
+                Modifier.background(MaterialTheme.colors.secondary.copy(alpha = 0.08f))
+            } else {
+                Modifier
+            }
+        ) {
             // Collapsed cart
             CollapsedCart(
                 items = items,

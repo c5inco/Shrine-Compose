@@ -12,9 +12,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = Color(0xfffedbd0),
+    primaryVariant = Color(0xfffbb8ac),
+    secondary = Color(0xfffeeae6)
 )
 
 private val LightColorPalette = lightColors(
@@ -43,7 +43,7 @@ fun ShrineTheme(
     }
 
     MaterialTheme(
-        colors = LightColorPalette,
+        colors = colors,
         typography = Typography,
         shapes = Shapes,
         content = content

@@ -1,11 +1,9 @@
 package com.google.adux.shrine
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddShoppingCart
@@ -158,6 +156,14 @@ fun HomeCard(
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun HomeScreenPreview() {
+    ShrineTheme {
+        HomeScreen()
+    }
+}
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 640, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun HomeScreenDarkPreview() {
     ShrineTheme {
         HomeScreen()
     }
