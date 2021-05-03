@@ -3,13 +3,16 @@ package com.google.adux.shrine
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -111,7 +114,11 @@ fun HomeCard(
     onClick: (ItemData) -> Unit = {}
 ) {
     Column(
-        modifier.clickable { onClick(data) },
+        modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = rememberRipple(color = MaterialTheme.colors.primaryVariant),
+            onClick = { onClick(data) }
+        ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box {
