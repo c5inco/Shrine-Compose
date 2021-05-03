@@ -163,21 +163,25 @@ fun ExpandedCart(
                     .padding(end = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ProvideTextStyle(
+                    value = MaterialTheme.typography.body2
                 ) {
-                    Text("Subtotal", style = MaterialTheme.typography.body2)
-                    Text("Shipping", style = MaterialTheme.typography.body2)
-                    Text("Tax", style = MaterialTheme.typography.body2)
-                }
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        Text("Subtotal")
+                        Text("Shipping")
+                        Text("Tax")
+                    }
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(2.dp),
-                    horizontalAlignment = Alignment.End
-                ) {
-                    Text("${formatDollar(subtotal)}", style = MaterialTheme.typography.body2)
-                    Text("${formatDollar(shipping)}", style = MaterialTheme.typography.body2)
-                    Text("${formatDollar(subtotal * tax)}", style = MaterialTheme.typography.body2)
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(2.dp),
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        Text("${formatDollar(subtotal)}")
+                        Text("${formatDollar(shipping)}")
+                        Text("${formatDollar(subtotal * tax)}")
+                    }
                 }
             }
             Spacer(Modifier.height(24.dp))
