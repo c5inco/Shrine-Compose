@@ -135,7 +135,7 @@ fun Cart(
             modifier = if (isSystemInDarkTheme()) {
                 Modifier.background(MaterialTheme.colors.secondary.copy(alpha = 0.08f))
             } else {
-                Modifier
+                Modifier.background(MaterialTheme.colors.secondary)
             }
         ) {
             // Collapsed cart
