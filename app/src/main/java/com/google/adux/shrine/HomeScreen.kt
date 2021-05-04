@@ -154,16 +154,9 @@ fun HomeCard(
 }
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
-@Composable
-fun HomeScreenPreview() {
-    ShrineTheme {
-        HomeScreen()
-    }
-}
-
 @Preview(showBackground = true, widthDp = 360, heightDp = 640, uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun HomeScreenDarkPreview() {
+fun HomeScreenPreview() {
     ShrineTheme {
         HomeScreen()
     }

@@ -1,5 +1,6 @@
 package com.google.adux.shrine
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
@@ -303,32 +304,13 @@ fun AnimateListItem(visible: Boolean, idx: Int, content: @Composable () -> Unit)
 }
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
+@Preview(showBackground = true, widthDp = 360, heightDp = 640, uiMode = UI_MODE_NIGHT_YES)
 @ExperimentalAnimationApi
 @Composable
 fun NavigationSurfacePreview() {
     ShrineTheme {
         var toggle by remember { mutableStateOf(true) }
-        var activeScreen by remember { mutableStateOf(Category.Home) }
-        NavigationSurface(
-            inForeground = toggle,
-            activeCategory = activeScreen,
-            onToggle = {
-                toggle = it
-            },
-            onNavigate = {
-                activeScreen = it
-            }
-        )
-    }
-}
-
-@Preview(showBackground = true, widthDp = 360, heightDp = 640)
-@ExperimentalAnimationApi
-@Composable
-fun NavigationSurfaceDarkPreview() {
-    ShrineTheme(darkTheme = true) {
-        var toggle by remember { mutableStateOf(true) }
-        var activeScreen by remember { mutableStateOf(Category.All) }
+        var activeScreen by remember { mutableStateOf(Category.Accessories) }
         NavigationSurface(
             inForeground = toggle,
             activeCategory = activeScreen,
