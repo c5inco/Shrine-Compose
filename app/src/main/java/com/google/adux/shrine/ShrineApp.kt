@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -151,12 +152,28 @@ fun ShrineApp() {
             ) {
                 if (it == CartState.Opened) 1f else 0f
             }
+            val checkoutButtonScrimAlpha by checkoutButtonTransition.animateFloat(
+                label = "checkoutButtonScrimAlpha",
+                transitionSpec = {
+                    tween(durationMillis = 150, delayMillis = 400)
+                }
+            ) {
+                if (it == CartState.Opened) ContentAlpha.medium else 0f
+            }
 
             CheckoutButton(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .scale(checkoutButtonScale)
                     .alpha(checkoutButtonAlpha)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.White.copy(alpha = 0f),
+                                Color.White.copy(alpha = checkoutButtonScrimAlpha)
+                            )
+                        )
+                    ),
             )
 
             // TODO: Ask question about actual scaleEffect, not expand for AnimatedVisibility

@@ -22,8 +22,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -255,14 +253,6 @@ fun CheckoutButton(modifier: Modifier = Modifier) {
     Button(
         contentPadding = PaddingValues(16.dp),
         modifier = modifier
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color.White.copy(alpha = 0f),
-                        Color.White.copy(alpha = ContentAlpha.medium)
-                    )
-                )
-            )
             .padding(24.dp)
             .navigationBarsPadding()
             .fillMaxWidth(),
@@ -271,7 +261,6 @@ fun CheckoutButton(modifier: Modifier = Modifier) {
         Text("Proceed to checkout".toUpperCase())
     }
 }
-
 
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @ExperimentalAnimationApi
