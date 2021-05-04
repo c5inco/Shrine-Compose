@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.adux.shrine.ui.theme.ShrineTheme
 
 class MainActivity : ComponentActivity() {
     @ExperimentalAnimationApi
@@ -18,10 +17,8 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            ShrineTheme {
-                ProvideWindowInsets {
-                    ShrineApp()
-                }
+            ProvideWindowInsets {
+                ShrineApp()
             }
         }
     }
