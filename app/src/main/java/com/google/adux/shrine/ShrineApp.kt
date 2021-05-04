@@ -103,7 +103,7 @@ fun ShrineApp() {
                 enter = fadeIn(animationSpec = tween(durationMillis = 500, easing = LinearEasing)),
                 exit = fadeOut(animationSpec = tween(durationMillis = 500, easing = LinearEasing))
             ) {
-                Box(Modifier.background(Color.White.copy(alpha = ContentAlpha.medium)))
+                Box(Modifier.background(MaterialTheme.colors.surface.copy(alpha = ContentAlpha.medium)))
             }
 
             Cart(
@@ -169,8 +169,8 @@ fun ShrineApp() {
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
-                                Color.White.copy(alpha = 0f),
-                                Color.White.copy(alpha = checkoutButtonScrimAlpha)
+                                Color.Transparent,
+                                MaterialTheme.colors.surface.copy(alpha = checkoutButtonScrimAlpha)
                             )
                         )
                     ),

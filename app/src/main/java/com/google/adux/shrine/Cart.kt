@@ -130,11 +130,7 @@ fun Cart(
         elevation = if (isSystemInDarkTheme()) 24.dp else 0.dp
     ) {
         Box(
-            modifier = if (isSystemInDarkTheme()) {
-                Modifier.background(MaterialTheme.colors.secondary.copy(alpha = 0.08f))
-            } else {
-                Modifier.background(MaterialTheme.colors.secondary)
-            }
+            modifier = Modifier.background(MaterialTheme.colors.secondary.copy(alpha = if (isSystemInDarkTheme()) 0.08f else 1f))
         ) {
             // Collapsed cart
             CollapsedCart(
