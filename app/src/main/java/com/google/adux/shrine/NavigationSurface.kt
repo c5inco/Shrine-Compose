@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,8 +62,7 @@ fun NavigationSurface(
                     InsetAwareTopAppBar(
                         modifier = Modifier
                             .align(Alignment.TopCenter)
-                            .padding(horizontal = 24.dp)
-                        ,
+                            .padding(start = 8.dp, end = 24.dp),
                         title = {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_shrine_logo),
@@ -94,7 +94,7 @@ fun NavigationSurface(
                         InsetAwareTopAppBar(
                             title = {
                                 fun withLeftInset(number: Int = 0): Int {
-                                    return number + if (currentScreenWidthDp > smallWidthBreakpoint) 12 else 0
+                                    return number + if (currentScreenWidthDp > smallWidthBreakpoint) 8 else 0
                                 }
 
                                 val targetSize = withLeftInset(56).dp
@@ -331,7 +331,12 @@ private fun NavItemsHost(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(0.dp)
         ) {
-            NavItems(inForeground, horizontalOrientation = true, activeCategory = activeCategory, onNavigate = onNavigate)
+            NavItems(
+                inForeground,
+                horizontalOrientation = true,
+                activeCategory = activeCategory,
+                onNavigate = onNavigate
+            )
         }
     } else {
         Column(
@@ -339,7 +344,11 @@ private fun NavItemsHost(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            NavItems(inForeground, activeCategory = activeCategory, onNavigate = onNavigate)
+            NavItems(
+                inForeground,
+                activeCategory = activeCategory,
+                onNavigate = onNavigate
+            )
         }
     }
 }
@@ -357,7 +366,7 @@ private fun NavItems(
     var navItemModifier = Modifier.height(44.dp)
 
     navItemModifier = if (horizontalOrientation) {
-        navItemModifier.sizeIn(minWidth = 86.dp).padding(horizontal = 20.dp)
+        navItemModifier.sizeIn(minWidth = 72.dp).padding(horizontal = 16.dp)
     } else {
         navItemModifier.fillMaxWidth(0.5f)
     }
@@ -456,7 +465,6 @@ fun AnimateListItem(visible: Boolean, idx: Int, content: @Composable () -> Unit)
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Preview(showBackground = true, widthDp = 1024, heightDp = 768)
-@Preview(showBackground = true, widthDp = 768, heightDp = 1024)
 @ExperimentalAnimationApi
 @Composable
 fun NavigationSurfacePreview() {
@@ -476,7 +484,7 @@ fun NavigationSurfacePreview() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 1024, heightDp = 768)
+@Preview(device = Devices.NEXUS_7)
 @ExperimentalAnimationApi
 @Composable
 fun NavigationSurfaceAdaptivePreview() {
