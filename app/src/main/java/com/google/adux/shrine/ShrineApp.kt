@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
@@ -156,8 +157,11 @@ fun ShrineApp() {
         CheckoutButton(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .scale(checkoutButtonScale)
-                .alpha(checkoutButtonAlpha)
+                .graphicsLayer {
+                    alpha = checkoutButtonAlpha
+                    scaleX = checkoutButtonScale
+                    scaleY = checkoutButtonScale
+                }
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(

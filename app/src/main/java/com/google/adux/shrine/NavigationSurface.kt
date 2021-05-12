@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -159,7 +160,7 @@ fun NavigationSurface(
                                             contentDescription = "Menu icon",
                                             tint = MaterialTheme.colors.onBackground,
                                             modifier = Modifier
-                                                .alpha(menuIconAlpha)
+                                                .graphicsLayer { alpha = menuIconAlpha }
                                                 .offset(x = withLeftInset().dp)
                                         )
                                     }
@@ -220,7 +221,7 @@ fun NavigationSurface(
                                         fontSize = 17.sp,
                                         modifier = Modifier
                                             .offset(x = menuNameOffset)
-                                            .alpha(menuNameAlpha)
+                                            .graphicsLayer { alpha = menuNameAlpha }
                                     )
 
                                     val shrineNameTransition = updateTransition(
@@ -268,7 +269,7 @@ fun NavigationSurface(
                                         fontSize = 17.sp,
                                         modifier = Modifier
                                             .offset(x = shrineNameOffset)
-                                            .alpha(shrineNameAlpha)
+                                            .graphicsLayer { alpha = shrineNameAlpha }
                                     )
                                 }
                             },

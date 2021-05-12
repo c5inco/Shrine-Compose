@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,8 +58,11 @@ fun PlaygroundPreview() {
                         contentDescription = null,
                         modifier = Modifier
                             .size(64.dp)
-                            .scale(iconScale)
-                            .alpha(iconAlpha)
+                            .graphicsLayer {
+                                alpha = iconAlpha
+                                scaleX = iconScale
+                                scaleY = iconScale
+                            }
                     )
                 }
             }
