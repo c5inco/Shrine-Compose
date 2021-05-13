@@ -16,13 +16,13 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.adux.shrine.ui.theme.ShrineTheme
@@ -65,12 +65,7 @@ fun NavigationSurface(
                             .align(Alignment.TopCenter)
                             .padding(start = 8.dp, end = 24.dp),
                         title = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_shrine_logo),
-                                contentDescription = "Shrine logo",
-                                tint = MaterialTheme.colors.onBackground,
-                                modifier = Modifier.size(28.dp)
-                            )
+                            ShrineLogo()
                             Spacer(Modifier.width(4.dp))
                             Text(
                                 "Shrine".toUpperCase(),
@@ -165,14 +160,7 @@ fun NavigationSurface(
                                         )
                                     }
 
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_shrine_logo),
-                                        contentDescription = "Shrine logo",
-                                        tint = MaterialTheme.colors.onBackground,
-                                        modifier = Modifier
-                                            .size(28.dp)
-                                            .offset(x = logoOffset)
-                                    )
+                                    ShrineLogo(modifier = Modifier.offset(x = logoOffset))
                                 }
 
                                 Box {
@@ -296,17 +284,43 @@ fun NavigationSurface(
         }
     } else {
         Surface(
-            Modifier.width(232.dp).fillMaxHeight(),
+            Modifier
+                .width(232.dp)
+                .fillMaxHeight(),
             color = MaterialTheme.colors.background
         ) {
-            Column {
+            Column(
+                Modifier.fillMaxHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(Modifier.height(64.dp))
+                ShrineLogo(size = 36.dp)
+                Spacer(Modifier.height(16.dp))
+                Text("Shrine".toUpperCase(), style = MaterialTheme.typography.h5)
+                Spacer(Modifier.weight(1f))
                 NavItemsHost(
                     inForeground,
                     activeCategory = activeCategory,
                     onNavigate = { onNavigate(it) })
+                Spacer(Modifier.weight(1f))
+                SearchAction()
+                Spacer(Modifier.height(72.dp))
             }
         }
     }
+}
+
+@Composable
+private fun ShrineLogo(
+    modifier: Modifier = Modifier,
+    size: Dp = 28.dp
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_shrine_logo),
+        contentDescription = "Shrine logo",
+        tint = MaterialTheme.colors.onBackground,
+        modifier = modifier.size(size)
+    )
 }
 
 @Composable
@@ -367,7 +381,9 @@ private fun NavItems(
     var navItemModifier = Modifier.height(44.dp)
 
     navItemModifier = if (horizontalOrientation) {
-        navItemModifier.sizeIn(minWidth = 72.dp).padding(horizontal = 16.dp)
+        navItemModifier
+            .sizeIn(minWidth = 72.dp)
+            .padding(horizontal = 16.dp)
     } else {
         navItemModifier.fillMaxWidth(0.5f)
     }
@@ -485,22 +501,25 @@ fun NavigationSurfacePreview() {
     }
 }
 
-@Preview(device = Devices.NEXUS_7)
+@Preview(device = Devices.PIXEL_C)
 @ExperimentalAnimationApi
 @Composable
 fun NavigationSurfaceAdaptivePreview() {
     ShrineTheme {
         var toggle by remember { mutableStateOf(true) }
         var activeScreen by remember { mutableStateOf(Category.Accessories) }
-        NavigationSurface(
-            inForeground = toggle,
-            activeCategory = activeScreen,
-            onToggle = {
-                toggle = it
-            },
-            onNavigate = {
-                activeScreen = it
-            }
-        )
+
+        Box(Modifier.fillMaxSize()) {
+            NavigationSurface(
+                inForeground = toggle,
+                activeCategory = activeScreen,
+                onToggle = {
+                    toggle = it
+                },
+                onNavigate = {
+                    activeScreen = it
+                }
+            )
+        }
     }
 }
