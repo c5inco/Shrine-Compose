@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -67,11 +68,7 @@ fun NavigationSurface(
                         title = {
                             ShrineLogo()
                             Spacer(Modifier.width(4.dp))
-                            Text(
-                                "Shrine".toUpperCase(),
-                                style = MaterialTheme.typography.subtitle1,
-                                fontSize = 17.sp,
-                            )
+                            PrimaryMenuText(text = "Shrine")
                             Spacer(Modifier.width(16.dp))
                             NavItemsHost(
                                 true,
@@ -203,13 +200,10 @@ fun NavigationSurface(
                                         if (it == Visibility.GONE) 0f else 1f
                                     }
 
-                                    Text(
-                                        "Menu".toUpperCase(),
-                                        style = MaterialTheme.typography.subtitle1,
-                                        fontSize = 17.sp,
-                                        modifier = Modifier
-                                            .offset(x = menuNameOffset)
-                                            .graphicsLayer { alpha = menuNameAlpha }
+                                    PrimaryMenuText(modifier = Modifier
+                                        .offset(x = menuNameOffset)
+                                        .graphicsLayer { alpha = menuNameAlpha },
+                                        text = "Menu"
                                     )
 
                                     val shrineNameTransition = updateTransition(
@@ -251,13 +245,10 @@ fun NavigationSurface(
                                         if (it == Visibility.GONE) 0f else 1f
                                     }
 
-                                    Text(
-                                        "Shrine".toUpperCase(),
-                                        style = MaterialTheme.typography.subtitle1,
-                                        fontSize = 17.sp,
-                                        modifier = Modifier
-                                            .offset(x = shrineNameOffset)
-                                            .graphicsLayer { alpha = shrineNameAlpha }
+                                    PrimaryMenuText(modifier = Modifier
+                                        .offset(x = shrineNameOffset)
+                                        .graphicsLayer { alpha = shrineNameAlpha },
+                                        text = "Shrine"
                                     )
                                 }
                             },
@@ -296,7 +287,7 @@ fun NavigationSurface(
                 Spacer(Modifier.height(64.dp))
                 ShrineLogo(size = 36.dp)
                 Spacer(Modifier.height(16.dp))
-                Text("Shrine".toUpperCase(), style = MaterialTheme.typography.h5)
+                PrimaryMenuText(text = "Shrine", textStyle = MaterialTheme.typography.h5)
                 Spacer(Modifier.weight(1f))
                 NavItemsHost(
                     inForeground,
@@ -308,6 +299,19 @@ fun NavigationSurface(
             }
         }
     }
+}
+
+@Composable
+private fun PrimaryMenuText(
+    modifier: Modifier = Modifier,
+    text: String,
+    textStyle: TextStyle = MaterialTheme.typography.subtitle1.copy(fontSize = 17.sp)
+) {
+    Text(
+        text.toUpperCase(),
+        style = textStyle,
+        modifier = modifier
+    )
 }
 
 @Composable
