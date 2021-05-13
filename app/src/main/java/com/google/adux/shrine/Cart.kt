@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -106,20 +107,6 @@ fun Cart(
         if (it == CartState.Opened) 0.dp else 24.dp
     }
 
-    val collapsedCartAlpha by cartOpenTransition.animateFloat(
-        label = "collapsedCartAlpha",
-        transitionSpec = {
-            when {
-                CartState.Opened isTransitioningTo CartState.Closed ->
-                    tween(durationMillis = 117, delayMillis = 117, easing = LinearEasing)
-                else ->
-                    tween(durationMillis = 150, easing = LinearEasing)
-            }
-        }
-    ) {
-        if (it == CartState.Opened) 0f else 1f
-    }
-
     Surface(
         modifier
             .fillMaxWidth()
@@ -133,11 +120,16 @@ fun Cart(
             modifier = Modifier.background(MaterialTheme.colors.secondary.copy(alpha = if (isSystemInDarkTheme()) 0.08f else 1f))
         ) {
             // Collapsed cart
-            CollapsedCart(
-                items = items,
-                alpha = collapsedCartAlpha
+            AnimatedVisibility(
+                visible = !expanded,
+                enter = fadeIn(animationSpec = tween(durationMillis = 150, easing = LinearEasing)),
+                exit = fadeOut(animationSpec = tween(durationMillis = 117, delayMillis = 117, easing = LinearEasing))
             ) {
-                onExpand(true)
+                CollapsedCart(
+                    items = items,
+                ) {
+                    onExpand(true)
+                }
             }
 
             // Expanded cart
@@ -163,15 +155,13 @@ fun Cart(
 @Composable
 private fun CollapsedCart(
     items: List<ItemData> = SampleItemsData.subList(fromIndex = 0, toIndex = 3),
-    alpha: Float,
     onClick: () -> Unit
 ) {
     Row(
         Modifier
             .clickable { onClick() }
             .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp)
-            .navigationBarsPadding()
-            .alpha(alpha),
+            .navigationBarsPadding(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -234,8 +224,11 @@ private fun CollapsedCartItem(data: ItemData) {
         modifier = Modifier
             .size(40.dp)
             .clip(RoundedCornerShape(10.dp))
-            .scale(iconScale)
-            .alpha(iconAlpha)
+            .graphicsLayer {
+                alpha = iconAlpha
+                scaleX = iconScale
+                scaleY = iconScale
+            }
     )
 }
 
