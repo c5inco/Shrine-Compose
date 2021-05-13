@@ -138,13 +138,9 @@ fun NavigationSurface(
                                     }
 
                                     if (!inForeground) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.ic_menu_cut_24px),
-                                            contentDescription = "Menu icon",
-                                            tint = MaterialTheme.colors.onBackground,
-                                            modifier = Modifier
-                                                .graphicsLayer { alpha = menuIconAlpha }
-                                                .offset(x = withLeftInset().dp)
+                                        MenuIcon(modifier = Modifier
+                                            .graphicsLayer { alpha = menuIconAlpha }
+                                            .offset(x = withLeftInset().dp)
                                         )
                                     }
 
@@ -191,9 +187,10 @@ fun NavigationSurface(
                                         if (it == Visibility.GONE) 0f else 1f
                                     }
 
-                                    PrimaryMenuText(modifier = Modifier
-                                        .offset(x = menuNameOffset)
-                                        .graphicsLayer { alpha = menuNameAlpha },
+                                    PrimaryMenuText(
+                                        modifier = Modifier
+                                            .offset(x = menuNameOffset)
+                                            .graphicsLayer { alpha = menuNameAlpha },
                                         text = "Menu"
                                     )
 
@@ -236,9 +233,10 @@ fun NavigationSurface(
                                         if (it == Visibility.GONE) 0f else 1f
                                     }
 
-                                    PrimaryMenuText(modifier = Modifier
-                                        .offset(x = shrineNameOffset)
-                                        .graphicsLayer { alpha = shrineNameAlpha },
+                                    PrimaryMenuText(
+                                        modifier = Modifier
+                                            .offset(x = shrineNameOffset)
+                                            .graphicsLayer { alpha = shrineNameAlpha },
                                         text = "Shrine"
                                     )
                                 }
@@ -315,6 +313,18 @@ private fun ShrineLogo(
         contentDescription = "Shrine logo",
         tint = MaterialTheme.colors.onBackground,
         modifier = modifier.size(size)
+    )
+}
+
+@Composable
+private fun MenuIcon(
+    modifier: Modifier = Modifier,
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_menu_cut_24px),
+        contentDescription = "Menu icon",
+        tint = MaterialTheme.colors.onBackground,
+        modifier = modifier
     )
 }
 
