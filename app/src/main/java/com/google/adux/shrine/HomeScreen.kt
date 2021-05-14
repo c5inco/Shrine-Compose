@@ -13,8 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.adux.shrine.ui.theme.ShrineTheme
@@ -91,19 +94,27 @@ fun HomeScreen(
                 }
             }
 
-            IconButton(
-                modifier =
-                    Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(end = 4.dp),
-                onClick = {}
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Tune,
-                    contentDescription = "Filter icon"
-                )
-            }
+            FilterAction(modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(end = 4.dp),
+            )
         }
+    }
+}
+
+@Composable
+fun FilterAction(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    IconButton(
+        modifier = modifier,
+        onClick = { onClick() }
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.Tune,
+            contentDescription = "Filter icon"
+        )
     }
 }
 
