@@ -15,6 +15,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
@@ -33,6 +35,8 @@ fun ShrineApp() {
     var showCart by remember { mutableStateOf(false) }
 
     var cartItems by remember { mutableStateOf(SampleItemsData.subList(fromIndex = 0, toIndex = 2)) }
+
+    val currentScreenWidthDp = LocalConfiguration.current.screenWidthDp
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -75,11 +79,21 @@ fun ShrineApp() {
                 showMenu = false
             }
         )
-        HomeScreen(
-            modifier = Modifier
+
+        var homeScreenModifier = if (currentScreenWidthDp >= Breakpoints.largeWidth) {
+            Modifier
+                .align(Alignment.TopEnd)
+                .width(maxWidth - 232.dp)
+                .statusBarsPadding()
+        } else {
+            Modifier
                 .height((maxHeight.value - TOP_APPBAR_HEIGHT).dp)
                 .statusBarsPadding()
-                .offset(y = screenOffset),
+                .offset(y = screenOffset)
+        }
+
+        HomeScreen(
+            modifier = homeScreenModifier,
             items = inventory,
             onAddToCart = {
                 cartItems += it
@@ -121,6 +135,7 @@ fun ShrineApp() {
 
 @Preview(name = "Light theme", widthDp = 360, heightDp = 640)
 @Preview(name = "Dark theme", widthDp = 360, heightDp = 640, uiMode = UI_MODE_NIGHT_YES)
+@Preview(device = Devices.PIXEL_C)
 @ExperimentalAnimationApi
 @Composable
 fun ShrineAppPreview() {

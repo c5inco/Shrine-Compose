@@ -49,18 +49,15 @@ fun NavigationSurface(
     onToggle: (Boolean) -> Unit = {},
     onNavigate: (Category) -> Unit = {}
 ) {
-    val largeWidthBreakpoint = 1280
-    val mediumWidthBreakpoint = 1024
-    val smallWidthBreakpoint = 640
     val currentScreenWidthDp = LocalConfiguration.current.screenWidthDp
 
-    if (currentScreenWidthDp < largeWidthBreakpoint) {
+    if (currentScreenWidthDp < Breakpoints.largeWidth) {
         Surface(
             Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background,
         ) {
             Box {
-                if (currentScreenWidthDp >= mediumWidthBreakpoint) {
+                if (currentScreenWidthDp >= Breakpoints.mediumWidth) {
                     InsetAwareTopAppBar(
                         modifier = Modifier
                             .align(Alignment.TopCenter)
@@ -87,7 +84,7 @@ fun NavigationSurface(
                         InsetAwareTopAppBar(
                             title = {
                                 fun withLeftInset(number: Int = 0): Int {
-                                    return number + if (currentScreenWidthDp > smallWidthBreakpoint) 8 else 0
+                                    return number + if (currentScreenWidthDp > Breakpoints.smallWidth) 8 else 0
                                 }
 
                                 val targetSize = withLeftInset(56).dp
@@ -256,7 +253,7 @@ fun NavigationSurface(
                             actions = {
                                 SearchAction()
                                 Spacer(Modifier.width(
-                                        if (currentScreenWidthDp > smallWidthBreakpoint) 20.dp else 12.dp
+                                        if (currentScreenWidthDp > Breakpoints.smallWidth) 20.dp else 12.dp
                                     )
                                 )
                             },
@@ -266,7 +263,7 @@ fun NavigationSurface(
                         Spacer(Modifier.height(20.dp))
                         NavItemsHost(
                             inForeground,
-                            horizontalOrientation = currentScreenWidthDp >= mediumWidthBreakpoint,
+                            horizontalOrientation = currentScreenWidthDp >= Breakpoints.mediumWidth,
                             activeCategory = activeCategory,
                             onNavigate = { onNavigate(it) })
                     }

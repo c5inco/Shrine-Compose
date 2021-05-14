@@ -52,3 +52,9 @@ fun InsetAwareTopAppBar(
         )
     }
 }
+
+object Breakpoints {
+    val largeWidth = 1280
+    val mediumWidth = 1024
+    val smallWidth = 640
+}

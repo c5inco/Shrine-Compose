@@ -28,76 +28,18 @@ fun HomeScreen(
     items: List<ItemData> = SampleItemsData,
     onAddToCart: (ItemData) -> Unit = {}
 ) {
+    val currentScreenWidthDp = LocalConfiguration.current.screenWidthDp
+    val onDesktop = currentScreenWidthDp >= Breakpoints.largeWidth
+
     Surface(
-        modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        elevation = 16.dp
+        modifier = modifier,
+        shape = if (onDesktop) RectangleShape else MaterialTheme.shapes.large,
+        elevation = if (onDesktop) 4.dp else 16.dp
     ) {
-        Box(Modifier.fillMaxSize()) {
-            BoxWithConstraints(
-                Modifier
-                    .fillMaxSize()
-                    .padding(start = 16.dp)
-                    .horizontalScroll(rememberScrollState())
-            ) {
-                val gridGutter = 16.dp
-                Row(
-                    Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.spacedBy(gridGutter)
-                ) {
-                    var idx = 0
-                    while (idx < items.size) {
-                        val even = idx % 3 == 0
-                        if (even) {
-                            Column(
-                                Modifier
-                                    .fillMaxHeight()
-                                    .width(this@BoxWithConstraints.minWidth * 0.66f),
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                HomeCard(
-                                    data = items[idx],
-                                    modifier = Modifier
-                                        .align(Alignment.End)
-                                        .fillMaxWidth(0.85f),
-                                    onClick = { onAddToCart(it) }
-                                )
-                                if (items.getOrNull(idx +1) != null) {
-                                    Spacer(Modifier.height(32.dp))
-                                    HomeCard(
-                                        data = items[idx + 1],
-                                        modifier = Modifier.fillMaxWidth(0.85f),
-                                        onClick = { onAddToCart(it) }
-                                    )
-                                }
-                            }
-                        } else {
-                            Column(
-                                Modifier
-                                    .fillMaxHeight()
-                                    .width(this@BoxWithConstraints.minWidth * 0.66f),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                HomeCard(
-                                    data = items[idx],
-                                    vertical = true,
-                                    modifier = Modifier.fillMaxWidth(0.8f),
-                                    onClick = { onAddToCart(it) }
-                                )
-                            }
-                        }
-                        idx += if (even) 2 else 1
-                    }
-
-                    Spacer(Modifier.width(gridGutter))
-                }
-            }
-
-            FilterAction(modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(end = 4.dp),
-            )
+        if (!onDesktop) {
+            HorizontalGrid(items, onAddToCart)
+        } else {
+            VerticalGrid(items, onAddToCart)
         }
     }
 }
@@ -139,7 +81,9 @@ fun HomeCard(
                 contentDescription = "Image description of photo",
                 alignment = Alignment.TopCenter,
                 contentScale = if (vertical) ContentScale.FillHeight else ContentScale.FillWidth,
-                modifier = if (vertical) Modifier.fillMaxHeight(0.4f) else Modifier.fillMaxWidth().heightIn(max = 220.dp)
+                modifier = if (vertical) Modifier.fillMaxHeight(0.4f) else Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 220.dp)
             )
             Icon(
                 imageVector = Icons.Outlined.AddShoppingCart,
@@ -164,8 +108,152 @@ fun HomeCard(
     }
 }
 
+@Composable
+private fun HorizontalGrid(
+    items: List<ItemData>,
+    onAddToCart: (ItemData) -> Unit
+) {
+    Box(Modifier.fillMaxSize()) {
+        BoxWithConstraints(
+            Modifier
+                .fillMaxSize()
+                .padding(start = 16.dp)
+                .horizontalScroll(rememberScrollState())
+        ) {
+            val gridGutter = 16.dp
+            Row(
+                Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(gridGutter)
+            ) {
+                var idx = 0
+                while (idx < items.size) {
+                    val even = idx % 3 == 0
+                    if (even) {
+                        Column(
+                            Modifier
+                                .fillMaxHeight()
+                                .width(this@BoxWithConstraints.minWidth * 0.66f),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            HomeCard(
+                                data = items[idx],
+                                modifier = Modifier
+                                    .align(Alignment.End)
+                                    .fillMaxWidth(0.85f),
+                                onClick = { onAddToCart(it) }
+                            )
+                            if (items.getOrNull(idx +1) != null) {
+                                Spacer(Modifier.height(32.dp))
+                                HomeCard(
+                                    data = items[idx + 1],
+                                    modifier = Modifier.fillMaxWidth(0.85f),
+                                    onClick = { onAddToCart(it) }
+                                )
+                            }
+                        }
+                    } else {
+                        Column(
+                            Modifier
+                                .fillMaxHeight()
+                                .width(this@BoxWithConstraints.minWidth * 0.66f),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            HomeCard(
+                                data = items[idx],
+                                vertical = true,
+                                modifier = Modifier.fillMaxWidth(0.8f),
+                                onClick = { onAddToCart(it) }
+                            )
+                        }
+                    }
+                    idx += if (even) 2 else 1
+                }
+
+                Spacer(Modifier.width(gridGutter))
+            }
+        }
+
+        FilterAction(modifier = Modifier
+            .align(Alignment.TopEnd)
+            .padding(end = 4.dp),
+        )
+    }
+}
+
+@Composable
+private fun VerticalGrid(
+    items: List<ItemData>,
+    onAddToCart: (ItemData) -> Unit
+) {
+    Row(Modifier.fillMaxSize()) {
+        val itemColumns = 4
+
+        Column(
+            Modifier.weight(1f)
+                .padding(horizontal = 64.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Row(
+                Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                for (i in 0 until itemColumns) {
+                    val odd = i % 2 != 0
+                    val basePadding = 64
+
+                    Column(
+                        Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(top = if (odd) (basePadding + 72).dp else basePadding.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(48.dp)
+                    ) {
+                        val itemsForColumn = itemsForColumn(items, i, itemColumns)
+
+                        itemsForColumn.forEach {
+                            HomeCard(
+                                data = it,
+                                vertical = it.photoOrientation == PhotoOrientation.Portrait,
+                                onClick = { onAddToCart(it) }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        Column(
+            Modifier
+                .fillMaxHeight()
+                .width(64.dp)
+                .padding(vertical = 64.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            FilterAction()
+        }
+    }
+}
+
+private fun itemsForColumn(
+    items: List<ItemData>,
+    idx: Int,
+    maxColumns: Int
+): List<ItemData> {
+    val itemsForColumn = mutableListOf<ItemData>()
+
+    for (i in items.indices step maxColumns) {
+        if (items.getOrNull(i + idx) != null) {
+            itemsForColumn.add(items.get(i + idx))
+        }
+    }
+
+    return itemsForColumn.toList()
+}
+
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Preview(showBackground = true, widthDp = 360, heightDp = 640, uiMode = UI_MODE_NIGHT_YES)
+@Preview(device = Devices.PIXEL_C)
 @Composable
 fun HomeScreenPreview() {
     ShrineTheme {
