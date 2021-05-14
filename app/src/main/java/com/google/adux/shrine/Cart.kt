@@ -18,10 +18,10 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -238,10 +238,65 @@ private enum class CollapsedCartItem {
 }
 
 @Composable
-fun CheckoutButton(modifier: Modifier = Modifier) {
+fun CheckoutButton(
+    modifier: Modifier = Modifier,
+    cartExpanded: Boolean = false
+) {
+    val checkoutButtonTransition = updateTransition(
+        targetState = if (cartExpanded) CartState.Opened else CartState.Closed,
+        label = "checkoutButtonTransition"
+    )
+    val checkoutButtonScale by checkoutButtonTransition.animateFloat(
+        label = "checkoutButtonScale",
+        transitionSpec = {
+            when {
+                CartState.Opened isTransitioningTo CartState.Closed ->
+                    tween(durationMillis = 100, easing = FastOutLinearInEasing)
+                else ->
+                    tween(durationMillis = 250, delayMillis = 250, easing = LinearOutSlowInEasing)
+            }
+        }
+    ) {
+        if (it == CartState.Opened) 1f else 0.8f
+    }
+    val checkoutButtonAlpha by checkoutButtonTransition.animateFloat(
+        label = "checkoutButtonAlpha",
+        transitionSpec = {
+            when {
+                CartState.Opened isTransitioningTo CartState.Closed ->
+                    tween(durationMillis = 117, easing = LinearEasing)
+                else ->
+                    tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)
+            }
+        }
+    ) {
+        if (it == CartState.Opened) 1f else 0f
+    }
+    val checkoutButtonScrimAlpha by checkoutButtonTransition.animateFloat(
+        label = "checkoutButtonScrimAlpha",
+        transitionSpec = {
+            tween(durationMillis = 150, delayMillis = 400)
+        }
+    ) {
+        if (it == CartState.Opened) ContentAlpha.medium else 0f
+    }
+
     Button(
         contentPadding = PaddingValues(16.dp),
         modifier = modifier
+            .graphicsLayer {
+                alpha = checkoutButtonAlpha
+                scaleX = checkoutButtonScale
+                scaleY = checkoutButtonScale
+            }
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Transparent,
+                        MaterialTheme.colors.surface.copy(alpha = checkoutButtonScrimAlpha)
+                    )
+                )
+            )
             .padding(24.dp)
             .navigationBarsPadding()
             .fillMaxWidth(),
