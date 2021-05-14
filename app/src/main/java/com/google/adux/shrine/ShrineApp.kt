@@ -27,16 +27,16 @@ import com.google.adux.shrine.ui.theme.ShrineTheme
 @Composable
 fun ShrineApp() {
     val TOP_APPBAR_HEIGHT = 56
+    val currentScreenWidthDp = LocalConfiguration.current.screenWidthDp
+    val onDesktop = currentScreenWidthDp >= Breakpoints.largeWidth
 
     var activeCategory by remember { mutableStateOf(Category.All) }
     var inventory by remember { mutableStateOf(SampleItemsData.toList()) }
 
-    var showMenu by remember { mutableStateOf(false) }
+    var showMenu by remember { mutableStateOf(onDesktop) }
     var showCart by remember { mutableStateOf(false) }
 
     var cartItems by remember { mutableStateOf(SampleItemsData.subList(fromIndex = 0, toIndex = 2)) }
-
-    val currentScreenWidthDp = LocalConfiguration.current.screenWidthDp
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -64,7 +64,7 @@ fun ShrineApp() {
             inForeground = showMenu,
             activeCategory = activeCategory,
             onToggle = {
-                showMenu = it
+                if (!onDesktop) showMenu = it
             },
             onNavigate = {
                 activeCategory = it
@@ -76,7 +76,7 @@ fun ShrineApp() {
                         item.category == activeCategory
                     }
                 }
-                showMenu = false
+                if (!onDesktop) showMenu = false
             }
         )
 
@@ -110,21 +110,26 @@ fun ShrineApp() {
             Box(Modifier.background(MaterialTheme.colors.surface.copy(alpha = ContentAlpha.medium)))
         }
 
+        val cartMaxWidth = if (currentScreenWidthDp >= Breakpoints.largeWidth) 360.dp else maxWidth
+
         Cart(
-            modifier = Modifier.align(Alignment.BottomEnd),
+            modifier = Modifier.align(
+                if (currentScreenWidthDp >= Breakpoints.largeWidth) Alignment.TopEnd else Alignment.BottomEnd
+            ),
             items = cartItems,
             expanded = showCart,
             hidden = showMenu,
-            maxWidth = maxWidth,
+            maxWidth = cartMaxWidth,
             maxHeight = maxHeight,
             onRemoveItem = { indexToRemove ->
                 cartItems = cartItems.filterIndexed { idx, item ->
                     idx != indexToRemove
                 }
+            },
+            onExpand = {
+                showCart = it
             }
-        ) {
-            showCart = it
-        }
+        )
 
         CheckoutButton(
             modifier = Modifier.align(Alignment.BottomCenter),
@@ -134,7 +139,6 @@ fun ShrineApp() {
 }
 
 @Preview(name = "Light theme", widthDp = 360, heightDp = 640)
-@Preview(name = "Dark theme", widthDp = 360, heightDp = 640, uiMode = UI_MODE_NIGHT_YES)
 @Preview(device = Devices.PIXEL_C)
 @ExperimentalAnimationApi
 @Composable

@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,149 +47,278 @@ fun Cart(
     onRemoveItem: (Int) -> Unit = {},
     onExpand: (Boolean) -> Unit = {},
 ) {
-    val cartOpenTransition = updateTransition(
-        targetState = if (hidden) CartState.Hidden else if (expanded) CartState.Opened else CartState.Closed,
-        label = "cartTransition"
-    )
+    val currentScreenWidthDp = LocalConfiguration.current.screenWidthDp
+    val onDesktop = currentScreenWidthDp >= Breakpoints.largeWidth
 
-    val cartXOffset by cartOpenTransition.animateDp(
-        label = "cartXOffset",
-        transitionSpec = {
-            when {
-                CartState.Closed isTransitioningTo CartState.Hidden ->
-                    tween(durationMillis = 450)
-                CartState.Hidden isTransitioningTo CartState.Closed ->
-                    tween(durationMillis = 450)
-                CartState.Opened isTransitioningTo CartState.Closed ->
-                    tween(durationMillis = 433, delayMillis = 67)
-                else ->
-                    tween(durationMillis = 150)
+    if (!onDesktop) {
+        val cartOpenTransition = updateTransition(
+            targetState = if (hidden) CartState.Hidden else if (expanded) CartState.Opened else CartState.Closed,
+            label = "cartTransition"
+        )
+
+        val cartXOffset by cartOpenTransition.animateDp(
+            label = "cartXOffset",
+            transitionSpec = {
+                when {
+                    CartState.Closed isTransitioningTo CartState.Hidden ->
+                        tween(durationMillis = 450)
+                    CartState.Hidden isTransitioningTo CartState.Closed ->
+                        tween(durationMillis = 450)
+                    CartState.Opened isTransitioningTo CartState.Closed ->
+                        tween(durationMillis = 433, delayMillis = 67)
+                    else ->
+                        tween(durationMillis = 150)
+                }
             }
-        }
-    ) {
-        if (it == CartState.Hidden) {
-            maxWidth
-        }
-        else if (it == CartState.Opened) {
-            0.dp
-        } else {
-            val size = min(3, items.size)
-            var width = 24 + 40 * (size + 1) + 16 * size + 16
-            if (items.size > 3) width += 24 + 16
-            (maxWidth.value - (width)).dp
-        }
-    }
-
-    val cartHeight by cartOpenTransition.animateDp(
-        label = "cartHeight",
-        transitionSpec = {
-            when {
-                CartState.Opened isTransitioningTo CartState.Closed ->
-                    tween(durationMillis = 283)
-                else ->
-                    tween(durationMillis = 500)
-            }
-        }
-    ) {
-        if (it == CartState.Opened) maxHeight else (40 + 8 + 8).dp
-    }
-
-    val cornerSize by cartOpenTransition.animateDp(
-        label = "cartCornerSize",
-        transitionSpec = {
-            when {
-                CartState.Opened isTransitioningTo CartState.Closed ->
-                    tween(durationMillis = 433, delayMillis = 67)
-                else ->
-                    tween(durationMillis = 150)
-            }
-        }
-    ) {
-        if (it == CartState.Opened) 0.dp else 24.dp
-    }
-
-    Surface(
-        modifier
-            .fillMaxWidth()
-            .offset(x = cartXOffset)
-            .navigationBarsHeight(cartHeight)
-            .shadow(8.dp, CutCornerShape(topStart = cornerSize))
-            .clip(CutCornerShape(topStart = cornerSize)),
-        elevation = if (isSystemInDarkTheme()) 24.dp else 0.dp
-    ) {
-        Box(
-            modifier = Modifier.background(MaterialTheme.colors.secondary.copy(alpha = if (isSystemInDarkTheme()) 0.08f else 1f))
         ) {
-            // Collapsed cart
-            AnimatedVisibility(
-                visible = !expanded,
-                enter = fadeIn(animationSpec = tween(durationMillis = 150, easing = LinearEasing)),
-                exit = fadeOut(animationSpec = tween(durationMillis = 117, delayMillis = 117, easing = LinearEasing))
-            ) {
-                CollapsedCart(
-                    items = items,
-                ) {
-                    onExpand(true)
+            when (it) {
+                CartState.Opened -> {
+                    maxWidth
+                }
+                else -> {
+                    val size = min(3, items.size)
+                    var width = 24 + 40 * (size + 1) + 16 * size + 16
+                    if (items.size > 3) width += 24 + 16
+                    width.dp
                 }
             }
+        }
 
-            // Expanded cart
-            AnimatedVisibility(
-                visible = expanded,
-                enter = fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)),
-                exit = fadeOut(animationSpec = tween(durationMillis = 117, easing = LinearEasing))
-            ) {
-                ExpandedCart(
-                    items = items,
-                    onRemoveItem = {
-                        onRemoveItem(it)
-                    }
-                ) {
-                    onExpand(false)
+        val cartHeight by cartOpenTransition.animateDp(
+            label = "cartHeight",
+            transitionSpec = {
+                when {
+                    CartState.Opened isTransitioningTo CartState.Closed ->
+                        tween(durationMillis = 283)
+                    else ->
+                        tween(durationMillis = 500)
                 }
             }
+        ) {
+            if (it == CartState.Opened) maxHeight else (40 + 8 + 8).dp
+        }
+
+        val cornerSize by cartOpenTransition.animateDp(
+            label = "cartCornerSize",
+            transitionSpec = {
+                when {
+                    CartState.Opened isTransitioningTo CartState.Closed ->
+                        tween(durationMillis = 433, delayMillis = 67)
+                    else ->
+                        tween(durationMillis = 150)
+                }
+            }
+        ) {
+            if (it == CartState.Opened) 0.dp else 24.dp
+        }
+
+        Surface(
+            modifier
+                .width(cartXOffset)
+                .navigationBarsHeight(cartHeight)
+                .shadow(8.dp, CutCornerShape(topStart = cornerSize))
+                .clip(CutCornerShape(topStart = cornerSize)),
+            elevation = if (isSystemInDarkTheme()) 24.dp else 0.dp
+        ) {
+            CartContents(
+                cartExpanded = expanded,
+                items = items,
+                onRemoveItem = onRemoveItem,
+                onExpand = onExpand
+            )
+        }
+    } else {
+        val cartDesktopTransition = updateTransition(
+            targetState = if (expanded) CartState.Opened else CartState.Closed,
+            label = "cartDesktopTransition"
+        )
+
+        val cartDesktopYOffset by cartDesktopTransition.animateDp(
+            label = "cartDesktopYOffset",
+            transitionSpec = {
+                when {
+                    CartState.Opened isTransitioningTo CartState.Closed ->
+                        tween(durationMillis = 433, delayMillis = 67)
+                    else ->
+                        tween(durationMillis = 150)
+                }
+            }
+        ) {
+            if (it == CartState.Opened) 0.dp else (64 + 48 + 24).dp
+        }
+
+        val cartDesktopWidth by cartDesktopTransition.animateDp(
+            label = "cartDesktopWidth",
+            transitionSpec = {
+                when {
+                    CartState.Opened isTransitioningTo CartState.Closed ->
+                        tween(durationMillis = 433, delayMillis = 67)
+                    else ->
+                        tween(durationMillis = 150)
+                }
+            }
+        ) {
+            if (it == CartState.Opened) maxWidth else 64.dp
+        }
+
+        val cartDesktopHeight by cartDesktopTransition.animateDp(
+            label = "cartDesktopHeight",
+            transitionSpec = {
+                when {
+                    CartState.Opened isTransitioningTo CartState.Closed ->
+                        tween(durationMillis = 283)
+                    CartState.Closed isTransitioningTo CartState.Opened ->
+                        tween(durationMillis = 500)
+                    else ->
+                        tween(durationMillis = 150)
+                }
+            }
+        ) {
+            if (it == CartState.Opened) {
+                maxHeight
+            } else {
+                val size = min(3, items.size)
+                var height = 12 + 40 * (size + 1) + 16 * size + 16
+                if (items.size > 3) height += 24 + 16
+                height.dp
+            }
+        }
+
+        val cornerSize by cartDesktopTransition.animateDp(
+            label = "cartCornerSize",
+            transitionSpec = {
+                when {
+                    CartState.Opened isTransitioningTo CartState.Closed ->
+                        tween(durationMillis = 433, delayMillis = 67)
+                    else ->
+                        tween(durationMillis = 150)
+                }
+            }
+        ) {
+            if (it == CartState.Opened) 0.dp else 16.dp
+        }
+
+        Surface(
+            modifier
+                .offset(y = cartDesktopYOffset)
+                .width(cartDesktopWidth)
+                .height(cartDesktopHeight)
+                .shadow(8.dp, CutCornerShape(topStart = cornerSize, bottomStart = cornerSize))
+                .clip(CutCornerShape(topStart = cornerSize, bottomStart = cornerSize)),
+            elevation = if (isSystemInDarkTheme()) 24.dp else 0.dp
+        ) {
+            CartContents(
+                cartExpanded = expanded,
+                items = items,
+                onRemoveItem = onRemoveItem,
+                onExpand = onExpand
+            )
         }
     }
 }
 
 @ExperimentalAnimationApi
 @Composable
+private fun CartContents(
+    cartExpanded: Boolean,
+    items: List<ItemData>,
+    onRemoveItem: (Int) -> Unit,
+    onExpand: (Boolean) -> Unit
+) {
+    Box(
+        modifier = Modifier.background(MaterialTheme.colors.secondary.copy(alpha = if (isSystemInDarkTheme()) 0.08f else 1f))
+    ) {
+        // Collapsed cart
+        AnimatedVisibility(
+            visible = !cartExpanded,
+            enter = fadeIn(animationSpec = tween(durationMillis = 117, delayMillis = 117, easing = LinearEasing)),
+            exit = fadeOut(animationSpec = tween(durationMillis = 150, easing = LinearEasing))
+        ) {
+            CollapsedCart(
+                items = items,
+                vertical = LocalConfiguration.current.screenWidthDp >= Breakpoints.largeWidth
+            ) {
+                onExpand(true)
+            }
+        }
+
+        // Expanded cart
+        AnimatedVisibility(
+            visible = cartExpanded,
+            enter = fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)),
+            exit = fadeOut(animationSpec = tween(durationMillis = 117, easing = LinearEasing))
+        ) {
+            ExpandedCart(
+                items = items,
+                onRemoveItem = {
+                    onRemoveItem(it)
+                }
+            ) {
+                onExpand(false)
+            }
+        }
+    }
+}
+
+@Composable
 private fun CollapsedCart(
     items: List<ItemData> = SampleItemsData.subList(fromIndex = 0, toIndex = 3),
+    vertical: Boolean = false,
     onClick: () -> Unit
 ) {
-    Row(
-        Modifier
-            .clickable { onClick() }
-            .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp)
-            .navigationBarsPadding(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    if (vertical) {
+        Column(
+            Modifier
+                .clickable { onClick() }
+                .width(64.dp)
+                .wrapContentHeight()
+                .padding(top = 12.dp, bottom = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            CollapsedCartItems(items)
+        }
+    } else {
+        Row(
+            Modifier
+                .clickable { onClick() }
+                .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp)
+                .navigationBarsPadding(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            CollapsedCartItems(items)
+        }
+    }
+}
+
+@Composable
+private fun CollapsedCartItems(
+    items: List<ItemData>
+) {
+    Box(
+        Modifier.size(40.dp),
+        contentAlignment = Alignment.Center
     ) {
+        Icon(
+            imageVector = Icons.Default.ShoppingCart,
+            contentDescription = "Shopping cart icon",
+        )
+    }
+    for (i in 0 until min(3, items.size)) {
+        key(i) {
+            CollapsedCartItem(data = items[i])
+        }
+    }
+    if (items.size > 3) {
         Box(
-            Modifier.size(40.dp),
+            Modifier.size(width = 24.dp, height = 40.dp),
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                imageVector = Icons.Default.ShoppingCart,
-                contentDescription = "Shopping cart icon",
+            Text(
+                "+${items.size - 3}",
+                style = MaterialTheme.typography.subtitle2,
             )
-        }
-        for (i in 0 until min(3, items.size)) {
-            key(i) {
-                CollapsedCartItem(data = items[i])
-            }
-        }
-        if (items.size > 3) {
-            Box(
-                Modifier.size(width = 24.dp, height = 40.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "+${items.size - 3}",
-                    style = MaterialTheme.typography.subtitle2,
-                )
-            }
         }
     }
 }
@@ -307,18 +437,21 @@ fun CheckoutButton(
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_4)
+@Preview(device = Devices.PIXEL_C)
 @ExperimentalAnimationApi
 @Composable
 fun CartPreview() {
-    var showCart by remember { mutableStateOf(false) }
+    var showCart by remember { mutableStateOf(true) }
 
     ShrineTheme {
         BoxWithConstraints(Modifier.fillMaxSize()) {
+            val cartMaxWidth = if (LocalConfiguration.current.screenWidthDp >= Breakpoints.largeWidth) 360.dp else maxWidth
+
             Cart(
                 modifier = Modifier.align(Alignment.BottomEnd),
                 expanded = showCart,
                 maxHeight = maxHeight,
-                maxWidth = maxWidth,
+                maxWidth = cartMaxWidth,
                 onExpand = {
                     showCart = it
                 },
