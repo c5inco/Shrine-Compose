@@ -58,12 +58,15 @@ fun Cart(
 
         val cartXOffset by cartOpenTransition.animateDp(
             label = "cartXOffset",
+            transitionSpec = { tween(durationMillis = 450) }
+        ) {
+           if (it == CartState.Hidden) maxWidth else 0.dp
+        }
+
+        val cartWidth by cartOpenTransition.animateDp(
+            label = "cartWidth",
             transitionSpec = {
                 when {
-                    CartState.Closed isTransitioningTo CartState.Hidden ->
-                        tween(durationMillis = 450)
-                    CartState.Hidden isTransitioningTo CartState.Closed ->
-                        tween(durationMillis = 450)
                     CartState.Opened isTransitioningTo CartState.Closed ->
                         tween(durationMillis = 433, delayMillis = 67)
                     else ->
@@ -114,7 +117,8 @@ fun Cart(
 
         Surface(
             modifier
-                .width(cartXOffset)
+                .offset(x = cartXOffset)
+                .width(cartWidth)
                 .navigationBarsHeight(cartHeight)
                 .shadow(8.dp, CutCornerShape(topStart = cornerSize))
                 .clip(CutCornerShape(topStart = cornerSize)),
