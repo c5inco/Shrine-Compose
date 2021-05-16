@@ -10,8 +10,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.statusBarsPadding
+import com.google.adux.shrine.ui.theme.ShrinePink300
 import com.google.adux.shrine.ui.theme.ShrineTheme
 
 @ExperimentalAnimationApi
@@ -131,7 +130,13 @@ fun ShrineApp() {
         )
 
         CheckoutButton(
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = if (onDesktop) {
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .sizeIn(maxWidth = 360.dp)
+            } else {
+                Modifier.align(Alignment.BottomCenter)
+            },
             cartExpanded = showCart
         )
     }
