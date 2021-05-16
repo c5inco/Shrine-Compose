@@ -47,82 +47,27 @@ fun Cart(
     onRemoveItem: (Int) -> Unit = {},
     onExpand: (Boolean) -> Unit = {},
 ) {
+    val surfaceElevation = if (isSystemInDarkTheme()) 24.dp else 0.dp
     val currentScreenWidthDp = LocalConfiguration.current.screenWidthDp
     val onDesktop = currentScreenWidthDp >= Breakpoints.largeWidth
 
     if (!onDesktop) {
-        val cartOpenTransition = updateTransition(
-            targetState = if (hidden) CartState.Hidden else if (expanded) CartState.Opened else CartState.Closed,
-            label = "cartTransition"
+        val mobileTransitionData = updateCartTransitionData(
+            cartState = if (hidden) CartState.Hidden else if (expanded) CartState.Opened else CartState.Closed,
+            offsetXPair = Pair(maxWidth, 0.dp),
+            widthPair = Pair(maxWidth, getCollapsedCartSize(items)),
+            heightPair = Pair(maxHeight, (40 + 8 + 8).dp),
+            cornerSizePair = Pair(0.dp, 24.dp)
         )
-
-        val cartXOffset by cartOpenTransition.animateDp(
-            label = "cartXOffset",
-            transitionSpec = { tween(durationMillis = 450) }
-        ) {
-           if (it == CartState.Hidden) maxWidth else 0.dp
-        }
-
-        val cartWidth by cartOpenTransition.animateDp(
-            label = "cartWidth",
-            transitionSpec = {
-                when {
-                    CartState.Opened isTransitioningTo CartState.Closed ->
-                        tween(durationMillis = 433, delayMillis = 67)
-                    else ->
-                        tween(durationMillis = 150)
-                }
-            }
-        ) {
-            when (it) {
-                CartState.Opened -> {
-                    maxWidth
-                }
-                else -> {
-                    val size = min(3, items.size)
-                    var width = 24 + 40 * (size + 1) + 16 * size + 16
-                    if (items.size > 3) width += 24 + 16
-                    width.dp
-                }
-            }
-        }
-
-        val cartHeight by cartOpenTransition.animateDp(
-            label = "cartHeight",
-            transitionSpec = {
-                when {
-                    CartState.Opened isTransitioningTo CartState.Closed ->
-                        tween(durationMillis = 283)
-                    else ->
-                        tween(durationMillis = 500)
-                }
-            }
-        ) {
-            if (it == CartState.Opened) maxHeight else (40 + 8 + 8).dp
-        }
-
-        val cornerSize by cartOpenTransition.animateDp(
-            label = "cartCornerSize",
-            transitionSpec = {
-                when {
-                    CartState.Opened isTransitioningTo CartState.Closed ->
-                        tween(durationMillis = 433, delayMillis = 67)
-                    else ->
-                        tween(durationMillis = 150)
-                }
-            }
-        ) {
-            if (it == CartState.Opened) 0.dp else 24.dp
-        }
 
         Surface(
             modifier
-                .offset(x = cartXOffset)
-                .width(cartWidth)
-                .navigationBarsHeight(cartHeight)
-                .shadow(8.dp, CutCornerShape(topStart = cornerSize))
-                .clip(CutCornerShape(topStart = cornerSize)),
-            elevation = if (isSystemInDarkTheme()) 24.dp else 0.dp
+                .offset(x = mobileTransitionData.offsetX)
+                .width(mobileTransitionData.width)
+                .navigationBarsHeight(mobileTransitionData.height)
+                .shadow(8.dp, CutCornerShape(topStart = mobileTransitionData.cornerSize))
+                .clip(CutCornerShape(topStart = mobileTransitionData.cornerSize)),
+            elevation = surfaceElevation
         ) {
             CartContents(
                 cartExpanded = expanded,
@@ -132,84 +77,22 @@ fun Cart(
             )
         }
     } else {
-        val cartDesktopTransition = updateTransition(
-            targetState = if (expanded) CartState.Opened else CartState.Closed,
-            label = "cartDesktopTransition"
+        val desktopTransitionData = updateCartTransitionData(
+            cartState = if (expanded) CartState.Opened else CartState.Closed,
+            offsetYPair = Pair(0.dp, (64 + 48 + 24).dp),
+            widthPair = Pair(maxWidth, 64.dp),
+            heightPair = Pair(maxHeight, getCollapsedCartSize(items)),
+            cornerSizePair = Pair(0.dp, 16.dp)
         )
-
-        val cartDesktopYOffset by cartDesktopTransition.animateDp(
-            label = "cartDesktopYOffset",
-            transitionSpec = {
-                when {
-                    CartState.Opened isTransitioningTo CartState.Closed ->
-                        tween(durationMillis = 433, delayMillis = 67)
-                    else ->
-                        tween(durationMillis = 150)
-                }
-            }
-        ) {
-            if (it == CartState.Opened) 0.dp else (64 + 48 + 24).dp
-        }
-
-        val cartDesktopWidth by cartDesktopTransition.animateDp(
-            label = "cartDesktopWidth",
-            transitionSpec = {
-                when {
-                    CartState.Opened isTransitioningTo CartState.Closed ->
-                        tween(durationMillis = 433, delayMillis = 67)
-                    else ->
-                        tween(durationMillis = 150)
-                }
-            }
-        ) {
-            if (it == CartState.Opened) maxWidth else 64.dp
-        }
-
-        val cartDesktopHeight by cartDesktopTransition.animateDp(
-            label = "cartDesktopHeight",
-            transitionSpec = {
-                when {
-                    CartState.Opened isTransitioningTo CartState.Closed ->
-                        tween(durationMillis = 283)
-                    CartState.Closed isTransitioningTo CartState.Opened ->
-                        tween(durationMillis = 500)
-                    else ->
-                        tween(durationMillis = 150)
-                }
-            }
-        ) {
-            if (it == CartState.Opened) {
-                maxHeight
-            } else {
-                val size = min(3, items.size)
-                var height = 12 + 40 * (size + 1) + 16 * size + 16
-                if (items.size > 3) height += 24 + 16
-                height.dp
-            }
-        }
-
-        val cornerSize by cartDesktopTransition.animateDp(
-            label = "cartCornerSize",
-            transitionSpec = {
-                when {
-                    CartState.Opened isTransitioningTo CartState.Closed ->
-                        tween(durationMillis = 433, delayMillis = 67)
-                    else ->
-                        tween(durationMillis = 150)
-                }
-            }
-        ) {
-            if (it == CartState.Opened) 0.dp else 16.dp
-        }
 
         Surface(
             modifier
-                .offset(y = cartDesktopYOffset)
-                .width(cartDesktopWidth)
-                .height(cartDesktopHeight)
-                .shadow(8.dp, CutCornerShape(topStart = cornerSize, bottomStart = cornerSize))
-                .clip(CutCornerShape(topStart = cornerSize, bottomStart = cornerSize)),
-            elevation = if (isSystemInDarkTheme()) 24.dp else 0.dp
+                .offset(y = desktopTransitionData.offsetY)
+                .width(desktopTransitionData.width)
+                .height(desktopTransitionData.height)
+                .shadow(8.dp, CutCornerShape(topStart = desktopTransitionData.cornerSize, bottomStart = desktopTransitionData.cornerSize))
+                .clip(CutCornerShape(topStart = desktopTransitionData.cornerSize, bottomStart = desktopTransitionData.cornerSize)),
+            elevation = surfaceElevation
         ) {
             CartContents(
                 cartExpanded = expanded,
@@ -219,6 +102,13 @@ fun Cart(
             )
         }
     }
+}
+
+private fun getCollapsedCartSize(items: List<ItemData>): Dp {
+    val totalItems = min(3, items.size)
+    var size = 24 + 40 * (totalItems + 1) + 16 * totalItems + 16
+    if (items.size > 3) size += 24 + 16
+    return size.dp
 }
 
 @ExperimentalAnimationApi
@@ -478,4 +368,97 @@ enum class CartState {
     Closed,
     Opened,
     Hidden
+}
+
+private class CartTransitionData(
+    offsetX: State<Dp>,
+    offsetY: State<Dp>,
+    width: State<Dp>,
+    height: State<Dp>,
+    cornerSize: State<Dp>
+) {
+    val offsetX by offsetX
+    val offsetY by offsetY
+    val width by width
+    val height by height
+    val cornerSize by cornerSize
+}
+
+@Composable
+private fun updateCartTransitionData(
+    cartState: CartState,
+    offsetXPair: Pair<Dp, Dp> = Pair(Dp.Unspecified, Dp.Unspecified),
+    offsetYPair: Pair<Dp, Dp> = Pair(Dp.Unspecified, Dp.Unspecified),
+    widthPair: Pair<Dp, Dp>,
+    heightPair: Pair<Dp, Dp>,
+    cornerSizePair: Pair<Dp, Dp>
+): CartTransitionData {
+    val transition = updateTransition(cartState, label = "cartTransition")
+
+    val offsetX = transition.animateDp(
+        label = "cartXOffset",
+        transitionSpec = { tween(durationMillis = 450) }
+    ) {
+        if (it == CartState.Hidden) offsetXPair.first else offsetXPair.second
+    }
+
+    val offsetY = transition.animateDp(
+        label = "cartYOffset",
+        transitionSpec = {
+            when {
+                CartState.Opened isTransitioningTo CartState.Closed ->
+                    tween(durationMillis = 433, delayMillis = 67)
+                else ->
+                    tween(durationMillis = 150)
+            }
+        }
+    ) {
+        if (it == CartState.Opened) offsetYPair.first else offsetYPair.second
+    }
+
+    val width = transition.animateDp(
+        label = "cartWidth",
+        transitionSpec = {
+            when {
+                CartState.Opened isTransitioningTo CartState.Closed ->
+                    tween(durationMillis = 433, delayMillis = 67)
+                else ->
+                    tween(durationMillis = 150)
+            }
+        }
+    ) {
+        if (it == CartState.Opened) widthPair.first else widthPair.second
+    }
+
+    val height = transition.animateDp(
+        label = "cartHeight",
+        transitionSpec = {
+            when {
+                CartState.Opened isTransitioningTo CartState.Closed ->
+                    tween(durationMillis = 283)
+                CartState.Closed isTransitioningTo CartState.Opened ->
+                    tween(durationMillis = 500)
+                else ->
+                    tween(durationMillis = 150)
+            }
+        }
+    ) {
+        if (it == CartState.Opened) heightPair.first else heightPair.second
+    }
+
+    val cornerSize = transition.animateDp(
+        label = "cartCornerSize",
+        transitionSpec = {
+            when {
+                CartState.Opened isTransitioningTo CartState.Closed ->
+                    tween(durationMillis = 433, delayMillis = 67)
+                else ->
+                    tween(durationMillis = 150)
+            }
+        }
+    ) {
+        if (it == CartState.Opened) cornerSizePair.first else cornerSizePair.second
+    }
+
+    return remember(transition) { CartTransitionData(offsetX, offsetY, width, height, cornerSize) }
 }
