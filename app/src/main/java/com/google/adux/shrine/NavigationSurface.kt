@@ -26,19 +26,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.statusBarsHeight
 import com.google.adux.shrine.ui.theme.ShrineTheme
 
 private enum class Visibility {
     VISIBLE,
     GONE
-}
-
-enum class Screens {
-    Home,
-    Accessories,
-    Clothing,
-    All,
-    Logout
 }
 
 @ExperimentalAnimationApi
@@ -281,7 +275,7 @@ fun NavigationSurface(
                 Modifier.fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(Modifier.height(64.dp))
+                Spacer(Modifier.statusBarsHeight(64.dp))
                 ShrineLogo(size = 36.dp)
                 Spacer(Modifier.height(16.dp))
                 PrimaryMenuText(text = "Shrine", textStyle = MaterialTheme.typography.h5)
@@ -292,7 +286,7 @@ fun NavigationSurface(
                     onNavigate = { onNavigate(it) })
                 Spacer(Modifier.weight(1f))
                 SearchAction()
-                Spacer(Modifier.height(72.dp))
+                Spacer(Modifier.navigationBarsHeight(72.dp))
             }
         }
     }

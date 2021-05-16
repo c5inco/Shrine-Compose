@@ -20,6 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.statusBarsHeight
 import com.google.adux.shrine.ui.theme.ShrineTheme
 
 @Composable
@@ -194,6 +196,7 @@ private fun VerticalGrid(
                 .padding(horizontal = 64.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            Spacer(Modifier.statusBarsHeight())
             Row(
                 Modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.spacedBy(24.dp)
@@ -222,6 +225,7 @@ private fun VerticalGrid(
                     }
                 }
             }
+            Spacer(Modifier.navigationBarsHeight())
         }
         Column(
             Modifier
@@ -230,6 +234,7 @@ private fun VerticalGrid(
                 .padding(vertical = 64.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(Modifier.statusBarsHeight())
             FilterAction()
         }
     }

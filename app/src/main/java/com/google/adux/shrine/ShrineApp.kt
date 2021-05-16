@@ -84,7 +84,6 @@ fun ShrineApp() {
             Modifier
                 .align(Alignment.TopEnd)
                 .width(maxWidth - 232.dp)
-                .statusBarsPadding()
         } else {
             Modifier
                 .height((maxHeight.value - TOP_APPBAR_HEIGHT).dp)
