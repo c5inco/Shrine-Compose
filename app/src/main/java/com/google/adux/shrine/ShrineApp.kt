@@ -105,7 +105,7 @@ fun ShrineApp() {
             enter = fadeIn(animationSpec = tween(durationMillis = 500, easing = LinearEasing)),
             exit = fadeOut(animationSpec = tween(durationMillis = 500, easing = LinearEasing))
         ) {
-            Box(Modifier.background(MaterialTheme.colors.surface.copy(alpha = ContentAlpha.medium)))
+            Box(Modifier.background(ShrinePink300.copy(alpha = 0.87f)))
         }
 
         val cartMaxWidth = if (currentScreenWidthDp >= Breakpoints.largeWidth) 360.dp else maxWidth
