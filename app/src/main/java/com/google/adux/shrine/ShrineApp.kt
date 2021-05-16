@@ -79,7 +79,7 @@ fun ShrineApp() {
             }
         )
 
-        var homeScreenModifier = if (currentScreenWidthDp >= Breakpoints.largeWidth) {
+        var homeScreenModifier = if (onDesktop) {
             Modifier
                 .align(Alignment.TopEnd)
                 .width(maxWidth - 232.dp)
@@ -108,16 +108,12 @@ fun ShrineApp() {
             Box(Modifier.background(ShrinePink300.copy(alpha = 0.87f)))
         }
 
-        val cartMaxWidth = if (currentScreenWidthDp >= Breakpoints.largeWidth) 360.dp else maxWidth
-
         Cart(
-            modifier = Modifier.align(
-                if (currentScreenWidthDp >= Breakpoints.largeWidth) Alignment.TopEnd else Alignment.BottomEnd
-            ),
+            modifier = Modifier.align(if (onDesktop) Alignment.TopEnd else Alignment.BottomEnd),
             items = cartItems,
             expanded = showCart,
             hidden = showMenu,
-            maxWidth = cartMaxWidth,
+            maxWidth = if (onDesktop) 360.dp else maxWidth,
             maxHeight = maxHeight,
             onRemoveItem = { indexToRemove ->
                 cartItems = cartItems.filterIndexed { idx, item ->
