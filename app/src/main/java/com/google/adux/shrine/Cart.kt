@@ -249,7 +249,7 @@ fun CheckoutButton(modifier: Modifier = Modifier) {
     Button(
         contentPadding = PaddingValues(16.dp),
         modifier = modifier
-            .padding(24.dp)
+            .padding(horizontal = 16.dp, vertical = 24.dp)
             .navigationBarsPadding()
             .fillMaxWidth(),
         onClick = { }
