@@ -14,23 +14,23 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
-    primary = Color(0xfffedbd0),
-    primaryVariant = Color(0xfffbb8ac),
-    secondary = Color(0xfffeeae6)
+    primary = ShrinePink100,
+    primaryVariant = ShrinePink500,
+    secondary = ShrinePink50
 )
 
 private val LightColorPalette = lightColors(
-    primary = Color(0xfffedbd0),
-    primaryVariant = Color(0xfffbb8ac),
-    secondary = Color(0xfffeeae6),
-    background = Color(0xfffedbd0),
-    surface = Color(0xfffffbfa),
+    primary = ShrinePink100,
+    primaryVariant = ShrinePink500,
+    secondary = ShrinePink50,
+    background = ShrinePink100,
+    surface = ShrinePink10,
     error = Color(0xffc5032b),
-    onPrimary = Maroon5,
-    onSecondary = Maroon5,
-    onBackground = Maroon5,
-    onSurface = Maroon5,
-    onError = Color(0xfffffbfa)
+    onPrimary = ShrinePink900,
+    onSecondary = ShrinePink900,
+    onBackground = ShrinePink900,
+    onSurface = ShrinePink900,
+    onError = ShrinePink10
 )
 
 @Composable

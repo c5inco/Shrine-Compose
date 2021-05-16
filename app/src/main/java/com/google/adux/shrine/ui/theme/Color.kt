@@ -2,9 +2,9 @@ package com.google.adux.shrine.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-
-val Maroon5 = Color(0xff442c2e)
+val ShrinePink10 = Color(0xfffffbfa)
+val ShrinePink50 = Color(0xfffeeae6)
+val ShrinePink100 = Color(0xfffedbd0)
+val ShrinePink300 = Color(0xfffff0ea)
+val ShrinePink500 = Color(0xfffbb8ac)
+val ShrinePink900 = Color(0xff442c2e)
