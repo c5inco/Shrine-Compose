@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.statusBarsPadding
+import com.google.adux.shrine.ui.theme.ShrinePink300
 import com.google.adux.shrine.ui.theme.ShrineTheme
 
 @ExperimentalAnimationApi
@@ -95,7 +96,7 @@ fun ShrineApp() {
             enter = fadeIn(animationSpec = tween(durationMillis = 500, easing = LinearEasing)),
             exit = fadeOut(animationSpec = tween(durationMillis = 500, easing = LinearEasing))
         ) {
-            Box(Modifier.background(MaterialTheme.colors.surface.copy(alpha = ContentAlpha.medium)))
+            Box(Modifier.background(ShrinePink300.copy(alpha = 0.87f)))
         }
 
         Cart(
