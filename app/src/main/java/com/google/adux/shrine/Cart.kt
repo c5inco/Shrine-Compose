@@ -15,7 +15,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -24,13 +27,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.adux.shrine.ui.theme.ShrineTheme
+import java.util.*
 import kotlin.math.min
 
 @ExperimentalAnimationApi
@@ -254,38 +255,7 @@ fun CheckoutButton(modifier: Modifier = Modifier) {
             .fillMaxWidth(),
         onClick = { }
     ) {
-        Text("Proceed to checkout".toUpperCase())
-    }
-}
-
-@Preview(showBackground = true, device = Devices.PIXEL_4)
-@ExperimentalAnimationApi
-@Composable
-fun CartPreview() {
-    var showCart by remember { mutableStateOf(false) }
-
-    ShrineTheme {
-        BoxWithConstraints(Modifier.fillMaxSize()) {
-            Cart(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                expanded = showCart,
-                maxHeight = maxHeight,
-                maxWidth = maxWidth,
-                onExpand = {
-                    showCart = it
-                },
-                items = SampleItemsData.subList(fromIndex = 0, toIndex = 3)
-            )
-
-            AnimatedVisibility(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                visible = showCart,
-                enter = fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)),
-                exit = fadeOut(animationSpec = tween(durationMillis = 117, easing = LinearEasing))
-            ) {
-                CheckoutButton()
-            }
-        }
+        Text("Proceed to checkout".uppercase(Locale.getDefault()))
     }
 }
 
