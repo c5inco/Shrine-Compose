@@ -1,3 +1,7 @@
+## ⛔️ OBSOLETE
+
+This repo is no longer maintained. Please use https://github.com/c5inco/Shrine-Compose-Stream, which is active and accompanies the [Material Live stream series](https://www.youtube.com/playlist?list=PLsoLz-E4Os4UMUXAuhpXaQzN4d8B9mQqV).
+
 # Shrine-Compose
 
 Shrine is the e-commerce Material Design case study: https://material.io/design/material-studies/shrine.html
